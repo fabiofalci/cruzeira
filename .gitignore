@@ -1,0 +1,9 @@
+logs/
+bin/
+target/
+.settings/
+.project
+.classpath
+*.jar
+*_jsp.java
+cruzeira-samples/cruzeira-sample/db/
