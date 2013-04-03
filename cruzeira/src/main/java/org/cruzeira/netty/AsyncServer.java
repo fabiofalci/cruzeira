@@ -3,6 +3,8 @@
  */
 package org.cruzeira.netty;
 
+import org.cruzeira.server.QueueExecutor;
+import org.cruzeira.server.ServerManager;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.handler.codec.http.HttpRequest;

@@ -1,7 +1,7 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.netty;
+package org.cruzeira.server;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

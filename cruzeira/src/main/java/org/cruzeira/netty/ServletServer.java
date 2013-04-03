@@ -18,6 +18,7 @@ import java.util.Set;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cruzeira.context.WebContext;
+import org.cruzeira.server.ServerManager;
 import org.cruzeira.servlet.HttpSession1;
 import org.cruzeira.servlet.ServletRequest1;
 import org.cruzeira.servlet.ServletResponse1;

@@ -24,7 +24,7 @@
     	</mvc:async-support>
     </mvc:annotation-driven>
     
-    <bean id="asyncTaskExecutor" class="org.cruzeira.netty.QueueExecutor" />
+    <bean id="asyncTaskExecutor" class="org.cruzeira.server.QueueExecutor" />
     
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 	   <property name="driverClass" value="org.h2.Driver" />
