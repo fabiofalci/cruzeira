@@ -1,7 +1,7 @@
 Cruzeira
 ============
 
-Cruzeira brings [Netty.io](http://netty.io) to [Spring Framework](http://www.springframework.org) implementing a subset of the [Servlet API](http://docs.oracle.com/javaee/6/api/javax/servlet/package-summary.html).
+Cruzeira brings [Netty.io](http://netty.io/) to [Spring Framework](http://www.springframework.org/) implementing a subset of the [Servlet API](http://docs.oracle.com/javaee/6/api/javax/servlet/package-summary.html).
 
 How to test:
 
