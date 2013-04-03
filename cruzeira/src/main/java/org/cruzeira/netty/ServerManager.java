@@ -27,7 +27,7 @@ public class ServerManager {
 
 	public void init(ClassLoader classLoader) {
 		try {
-			if (this.classLoader instanceof MyURLClassLoader) {
+			if (this.classLoader instanceof URLClassLoader) {
 				this.classLoader.close();
 			}
 			this.classLoader = (URLClassLoader) classLoader;
@@ -93,7 +93,7 @@ public class ServerManager {
 	}
 
 	private ClassLoader createClassLoader(URL[] urls) {
-		return new MyURLClassLoader(urls, null);
+		return new URLClassLoader(urls, null);
 	}
 
 	private void recompile() {
