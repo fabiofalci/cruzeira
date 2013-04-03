@@ -7,20 +7,19 @@ package org.cruzeira.filesystem;
  * This components watches any changes on file system. It should be used once,
  * that is, after {@link #hasChanges()} returns true, next time it is not
  * guaranteed that it will return true because of the same event (same change).
- * The safest way to use is to instantiate every time.
+ * The safest way to use is to reload it every time.
  * 
  */
 public interface FileSystemChanges {
 
 	/**
-	 * Indicates if the file system has changed since its creation
+	 * Indicates if the file system has changed since its creation/reload
 	 */
 	boolean hasChanges();
 
 	/**
-	 * Shutdown the underlying mechanism of watch. Any subsequent call to
-	 * {@link #hasChanges()} will produce false.
+	 * Reload the underlying mechanism of watch. 
 	 */
-	void shutdown();
+	void reload();
 
 }

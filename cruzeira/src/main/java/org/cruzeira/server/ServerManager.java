@@ -10,22 +10,47 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.cruzeira.context.SpringContext;
+import org.cruzeira.context.WebContext;
+import org.cruzeira.filesystem.FileSystemChanges;
 import org.cruzeira.filesystem.FileSystemChangesNIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+/**
+ * This manager controls when cruzeira needs to recompile and reload the project
+ * classes. Additionally it provides access to spring context and its dispatcher
+ * servlet. Maybe it should be divided in more classes.
+ * 
+ * <p>
+ * The reload feature it is supposed to be used only in development.
+ * 
+ */
 public class ServerManager {
 
-	private Object dispatcherServlet;
-	private Object springContext;
+	private Object httpServlet;
+	private Object webContext;
 	private URLClassLoader classLoader;
-	private FileSystemChangesNIO projectChanges;
+	private FileSystemChanges projectChanges;
+	private final Class<? extends WebContext> webContextClass;
+	
+	final Logger logger = LoggerFactory.getLogger(ServerManager.class);
 
 	public ServerManager() {
+		this(new FileSystemChangesNIO("src"), null);
+	}
+	
+	public ServerManager(FileSystemChanges fileSystemChanges, Class<? extends WebContext> webContextClass) {
+		if (webContextClass == null) {
+			this.webContextClass = SpringContext.class;
+		} else {
+			this.webContextClass = webContextClass;
+		}
+		this.projectChanges = fileSystemChanges;
 		URLClassLoader urlClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		init(urlClassLoader);
 	}
 
-	public void init(ClassLoader classLoader) {
+	private void init(ClassLoader classLoader) {
 		try {
 			if (this.classLoader instanceof URLClassLoader) {
 				this.classLoader.close();
@@ -34,16 +59,22 @@ public class ServerManager {
 
 			Thread.currentThread().setContextClassLoader(classLoader);
 
-			Class<?> springContextClass = classLoader.loadClass(SpringContext.class.getName());
-			springContext = springContextClass.newInstance();
+			Class<?> webContextClassNew = classLoader.loadClass(webContextClass.getName());
+			webContext = webContextClassNew.newInstance();
 
-			dispatcherServlet = springContext.getClass().getMethod("getDispatcherServlet").invoke(springContext);
+			httpServlet = webContext.getClass().getMethod("getHttpServlet").invoke(webContext);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.projectChanges = new FileSystemChangesNIO("src");
+		this.projectChanges.reload();
 	}
 
+	/**
+	 * JDBC drivers keeps some memory references in DriverManager. Because of
+	 * these referentes, the PermGen memory overflows in a few reloads. You can
+	 * easily see the overflow using visualvm. The solution removes all these
+	 * references clearing a private list in DriverManager. 
+	 */
 	private void removeDrivers() {
 		// very promising but doesn't remove from memory
 		// try {
@@ -61,7 +92,6 @@ public class ServerManager {
 				Field field = clazz.getDeclaredField("registeredDrivers");
 				field.setAccessible(true);
 				Object obj = field.get(null);
-				System.out.println(obj);
 				obj.getClass().getMethod("clear").invoke(obj);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -70,10 +100,9 @@ public class ServerManager {
 	}
 
 	private void shutdown() {
-		projectChanges.shutdown();
-		if (springContext != null) {
+		if (webContext != null) {
 			try {
-				springContext.getClass().getMethod("shutdown").invoke(springContext);
+				webContext.getClass().getMethod("shutdown").invoke(webContext);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -102,10 +131,10 @@ public class ServerManager {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				System.out.println("Compiling: " + line);
+				logger.debug("Compiling: {}", line);
 			}
 			process.waitFor();
-			System.out.println("Recompile exit status " + process.exitValue());
+			logger.debug("Recompile exit status {}", process.exitValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,11 +149,11 @@ public class ServerManager {
 	}
 
 	public Object getDispatcherServlet() {
-		return dispatcherServlet;
+		return httpServlet;
 	}
 
 	public Object getSpringContext() {
-		return springContext;
+		return webContext;
 	}
 
 }

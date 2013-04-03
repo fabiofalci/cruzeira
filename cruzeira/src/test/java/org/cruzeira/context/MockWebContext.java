@@ -1,13 +1,11 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.servlet;
+package org.cruzeira.context;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
-
-import org.cruzeira.context.WebContext;
 
 
 public class MockWebContext implements WebContext {

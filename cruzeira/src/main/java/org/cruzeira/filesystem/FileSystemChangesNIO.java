@@ -30,16 +30,18 @@ public class FileSystemChangesNIO implements FileSystemChanges {
 	final Logger logger = LoggerFactory.getLogger(FileSystemChangesNIO.class);
 
 	private WatchService watcher;
+	private final String dir;
 
 	public FileSystemChangesNIO(String dir) {
+		this.dir = dir;
 		try {
-			init(dir);
+			init();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void init(String dir) throws Exception {
+	private void init() throws Exception {
 		watcher = FileSystems.getDefault().newWatchService();
 		Path path = Paths.get(dir);
 
@@ -69,11 +71,12 @@ public class FileSystemChangesNIO implements FileSystemChanges {
 		return false;
 	}
 
-	public void shutdown() {
+	public void reload() {
 		try {
 			watcher.close();
 			watcher = null;
-		} catch (IOException e) {
+			init();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

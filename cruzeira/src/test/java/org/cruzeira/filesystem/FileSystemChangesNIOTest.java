@@ -34,6 +34,7 @@ public class FileSystemChangesNIOTest {
 			Files.deleteIfExists(Paths.get(basePath + "/subdir1/subdir2"));
 			Files.deleteIfExists(Paths.get(basePath + "/subdir1"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp.txt"));
+			Files.deleteIfExists(Paths.get(basePath + "/tmp1.txt"));
 			Files.deleteIfExists(path);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -51,6 +52,19 @@ public class FileSystemChangesNIOTest {
 	public void newFile() {
 		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath);
 		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertTrue(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void reload() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath);
+		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertTrue(fileSystemChanges.hasChanges());
+		
+		fileSystemChanges.reload();
+		createFile(basePath + "/tmp1.txt");
 		sleep();
 		Assert.assertTrue(fileSystemChanges.hasChanges());
 	}

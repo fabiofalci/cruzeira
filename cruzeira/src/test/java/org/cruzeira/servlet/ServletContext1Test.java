@@ -3,13 +3,16 @@
  */
 package org.cruzeira.servlet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 
-import org.cruzeira.servlet.ServletContext1;
+import org.cruzeira.context.MockWebContext;
 import org.junit.Test;
 
 
