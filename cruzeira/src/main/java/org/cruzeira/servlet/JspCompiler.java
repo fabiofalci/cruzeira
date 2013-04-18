@@ -25,6 +25,10 @@ public class JspCompiler {
 
 	public JspCompiler() throws IOException {
 		String uriRoot = "./src/main/java/views";
+		if (!Paths.get(uriRoot).toFile().exists()) {
+			return;	
+		}
+		
 		JspC jspc = new JspC();
 		jspc.setWebXmlFragment("/target/webfrag.xml");
 		jspc.setUriroot(uriRoot);
