@@ -34,10 +34,36 @@ How to test:
 
 It will run an instance of Netty and will dispatch any HttpRequest to SpringMVC.
 
+Maven Archetype
+---------------
+
+You can use a maven archetype to create a ready to run project.
+
+        cd cruzeira-samples/cruzeira-simple
+        mvn archetype:create-from-project
+        cd target/generated-sources/archetype/
+        mvn install
+        
+This will install a very simple cruzeira maven archetype into your local maven directory (~/.m2).
+Now you just need to tell maven to create a project looking for your local maven archetypes:
+
+        mvn archetype:generate -DarchetypeCatalog=local
+
+It will present all available archetype. Just choose the cruzeira-simple-archetype and then 
+continue with the project informations.
+Assuming the project name is test, just execute it:
+
+        cd test
+        mvn compile exec:exec
+        
+And then try http://localhost:8080/hello
+
+
 Attention
 ---------
 
-This is a work in progress. Even if Netty and Spring appears to be handling requests nicely, it should not be used seriously before a release.
+This is a work in progress. Even if Netty and Spring appears to be handling requests nicely, it
+should not be used seriously before a release.
        
 ## License
 The Cruzeira is released under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
