@@ -61,9 +61,19 @@ public class NettyServer extends ServletServer {
 	}
 
 	public static void main(String[] args) {
+		int port = 8080;
+		if (args.length == 2) {
+			if (args[0].equals("-p")) {
+				try {
+					port = Integer.valueOf(args[1]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		Logger logger = LoggerFactory.getLogger(NettyServer.class);
 		int cpus = Runtime.getRuntime().availableProcessors();
-		logger.info("CPUs " + cpus);
+		logger.info("CPUs: {}", cpus);
 
 		int asyncPool = cpus * 2 * 2;
 		OrderedMemoryAwareThreadPoolExecutor eventExecutor = new OrderedMemoryAwareThreadPoolExecutor(asyncPool, 0, 0, 30, TimeUnit.SECONDS);
@@ -80,8 +90,8 @@ public class NettyServer extends ServletServer {
 
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", false);
-		bootstrap.bind(new InetSocketAddress(8080));
-		logger.info("Running cruzeira...");
+		bootstrap.bind(new InetSocketAddress(port));
+		logger.info("Running cruzeira {}...", port);
 	}
 
 	static class MyPipelineFactory implements ChannelPipelineFactory {
