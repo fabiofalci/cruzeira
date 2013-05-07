@@ -58,6 +58,12 @@ Assuming the project name is test, just execute it:
         
 And then try http://localhost:8080/hello
 
+Heroku
+------
+
+The repository [Cruzeira Sample](https://github.com/fabiofalci/cruzeiras/) has an example that runs on [Heroku](https://www.heroku.com/).
+Click [Here](http://cruzeiras.herokuapp.com/) to see it in action.
+
 
 Attention
 ---------
