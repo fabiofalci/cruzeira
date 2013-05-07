@@ -8,6 +8,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Options;
 import org.cruzeira.server.OpenWebJar;
 import org.cruzeira.server.ServerManager;
 import org.jboss.netty.bootstrap.ServerBootstrap;
@@ -61,27 +65,47 @@ public class NettyServer extends ServletServer {
 	}
 
 	public static void main(String[] args) {
+		Options options = new Options();
+		options.addOption("p", true, "Http port");
+		options.addOption("dev", false, "Development mode");
+		CommandLineParser parser = new BasicParser();
+		Logger logger = LoggerFactory.getLogger(NettyServer.class);
 		int port = 8080;
-		if (args.length == 2) {
-			if (args[0].equals("-p")) {
+		boolean devMode = false;
+		try {
+			CommandLine cmd = parser.parse(options, args);	
+			if (cmd.hasOption("p")) {
 				try {
-					port = Integer.valueOf(args[1]);
+					port = Integer.valueOf(cmd.getOptionValue("p"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
+			devMode = cmd.hasOption("dev");
+			if (devMode) {
+				logger.info("Running in development mode");
+			} else {
+				logger.info("Running in normal mode");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Error on cli");
 		}
-		Logger logger = LoggerFactory.getLogger(NettyServer.class);
+		
 		int cpus = Runtime.getRuntime().availableProcessors();
 		logger.info("CPUs: {}", cpus);
 
-		int asyncPool = cpus * 2 * 2;
+		ChannelFactory factory;
+		int asyncPool; 
+		if (devMode) {
+			asyncPool = 1;
+			factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+		} else {
+			asyncPool = cpus * 2 * 2;
+			factory = new NioServerSocketChannelFactory(Executors.newSingleThreadExecutor(), Executors.newSingleThreadExecutor(), 1);
+		}
+		
 		OrderedMemoryAwareThreadPoolExecutor eventExecutor = new OrderedMemoryAwareThreadPoolExecutor(asyncPool, 0, 0, 30, TimeUnit.SECONDS);
-
-		ChannelFactory factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-		// ChannelFactory factory = new
-		// NioServerSocketChannelFactory(Executors.newSingleThreadExecutor(),
-		// Executors.newSingleThreadExecutor(), 1);
 
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		new OpenWebJar();

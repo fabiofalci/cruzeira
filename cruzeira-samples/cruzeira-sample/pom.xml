@@ -139,6 +139,7 @@
 						<argument>-classpath</argument>
 						<classpath />
 						<argument>org.cruzeira.netty.NettyServer</argument>
+						<argument>-dev</argument>
 					</arguments>
 				</configuration>
 			</plugin>
