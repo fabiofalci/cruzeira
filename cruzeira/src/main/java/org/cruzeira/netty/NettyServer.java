@@ -36,15 +36,23 @@ public class NettyServer extends ServletServer {
 
 //	private boolean readingChunks;
 	final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+	
+	/**
+	 * In development there is no class loader reloading
+	 */
+	private boolean devMode;
 
-	public NettyServer(ServerManager serverManager) {
+	public NettyServer(ServerManager serverManager, boolean devMode) {
 		super(serverManager);
+		this.devMode = devMode;
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent event) throws Exception {
 		logger.info("Received");
-		serverManager.beforeRequest();
+		if (devMode) {
+			serverManager.beforeRequest();
+		}
 		HttpRequest request = (HttpRequest) event.getMessage();
 		if (request.getUri().startsWith("/resources/")) {
 			return;
@@ -110,7 +118,7 @@ public class NettyServer extends ServletServer {
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		new OpenWebJar();
 
-		bootstrap.setPipelineFactory(new MyPipelineFactory(eventExecutor));
+		bootstrap.setPipelineFactory(new MyPipelineFactory(eventExecutor, devMode));
 
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", false);
@@ -121,10 +129,12 @@ public class NettyServer extends ServletServer {
 	static class MyPipelineFactory implements ChannelPipelineFactory {
 		private ServerManager serverManager;
 		private Executor pipelineExecutor;
+		private boolean devMode;
 
-		public MyPipelineFactory(Executor executor) {
+		public MyPipelineFactory(Executor executor, boolean devMode) {
 			this.serverManager = new ServerManager();
 			this.pipelineExecutor = executor;
+			this.devMode = devMode;
 		}
 
 		public ChannelPipeline getPipeline() {
@@ -148,7 +158,7 @@ public class NettyServer extends ServletServer {
 			pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
 			pipeline.addLast("filehandler", new FileServer());
 
-			pipeline.addLast("handler", new NettyServer(serverManager));
+			pipeline.addLast("handler", new NettyServer(serverManager, devMode));
 			pipeline.addLast("pipelineExecutor", new ExecutionHandler(pipelineExecutor));
 			pipeline.addLast("asyncHandler", new AsyncServer(serverManager));
 			return pipeline;
