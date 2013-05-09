@@ -57,7 +57,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 
 /**
- * @author frodrigues
  * 
  */
 public class FileServer extends SimpleChannelUpstreamHandler {

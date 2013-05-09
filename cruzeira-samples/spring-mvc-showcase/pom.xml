@@ -235,7 +235,7 @@
 								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=1044</argument>	
 								<argument>-classpath</argument>
 								<classpath />
-								<argument>org.cruzeira.netty.NettyServer</argument>
+								<argument>org.cruzeira.server.Bootstrap</argument>
 							</arguments>
 						</configuration>
 		            </plugin>
@@ -279,7 +279,7 @@
 						-->
 						<argument>-classpath</argument>
 						<classpath />
-						<argument>org.cruzeira.netty.NettyServer</argument>
+						<argument>org.cruzeira.server.Bootstrap</argument>
 					</arguments>
 				</configuration>
 			</plugin> 		    

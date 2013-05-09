@@ -11,6 +11,17 @@ import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This ChannelHandler handles Servlet async requests. It should not run on a
+ * worker thread but in an async thread instead (a thread pool created specially
+ * for async requests).
+ * 
+ * <p>
+ * There is a weird QueueExecutor with some nasty ThreadLocals to bring here the
+ * Callable created in the Spring async controller to run in this thread. Maybe
+ * think harder to come up a better solution.
+ * 
+ */
 public class AsyncServer extends ServletServer {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -35,7 +46,6 @@ public class AsyncServer extends ServletServer {
 			e.printStackTrace();
 		}
 
-//		logger.info("Running servlet service for async request");
 		servlets = doServlet(ctx, event, buf, servlets[0], servlets[1]);
 
 		HttpRequest request = (HttpRequest) event.getMessage();

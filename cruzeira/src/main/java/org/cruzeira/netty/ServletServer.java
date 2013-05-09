@@ -4,7 +4,9 @@
 package org.cruzeira.netty;
 
 import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
-import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.*;
+import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
+import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
+import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
@@ -42,7 +44,21 @@ import org.jboss.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * A generic ChannelHandler with some common methods related to http request
+ * transformation, servlet, http session, etc.
+ * 
+ * <p>
+ * There are some strange methods here using a lot of reflection without no
+ * apparent reason. The reason is, Cruzeira has a development mode that create a
+ * brand new ClassLoader when user modify a Class. That way the user doesn't
+ * need to stop and start the server, the application restart itself. It is not
+ * the Netty server that restart but only the web application, so, after the
+ * first restart, all Netty related code will use the original ClassLoader while
+ * all Spring related code (the application) will use the new ClassLoader. That
+ * is the reason, even the same Class from different ClassLoader, are different.
+ * 
+ */
 public class ServletServer extends SimpleChannelHandler {
 
 	protected ServerManager serverManager;
