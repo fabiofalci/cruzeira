@@ -45,11 +45,11 @@ public class PipelineFactory implements ChannelPipelineFactory {
 		// compression.
 		// pipeline.addLast("deflater", new HttpContentCompressor());
 		pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
-		pipeline.addLast("filehandler", new FileServer());
+		pipeline.addLast("filehandler", new ResourcesChannelHandler());
 
-		pipeline.addLast("handler", new NettyServer(serverManager, devMode));
+		pipeline.addLast("handler", new ServletChannelHandler(serverManager, devMode));
 		pipeline.addLast("pipelineExecutor", new ExecutionHandler(pipelineExecutor));
-		pipeline.addLast("asyncHandler", new AsyncServer(serverManager));
+		pipeline.addLast("asyncHandler", new AsyncServletChannelHandler(serverManager));
 		return pipeline;
 	}
 

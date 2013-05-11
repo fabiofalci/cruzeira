@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
  * think harder to come up a better solution.
  * 
  */
-public class AsyncServer extends ServletServer {
+public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public AsyncServer(ServerManager serverManager) {
+	public AsyncServletChannelHandler(ServerManager serverManager) {
 		super(serverManager);
 	}
 

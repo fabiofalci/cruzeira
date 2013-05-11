@@ -58,13 +58,13 @@ import org.slf4j.LoggerFactory;
  * is the reason, even the same Class from different ClassLoader, are different.
  * 
  */
-public class ServletServer extends SimpleChannelHandler {
+public class AbstractServletChannelHandler extends SimpleChannelHandler {
 
 	protected ServerManager serverManager;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	public static final ChannelLocal<Object[]> data = new ChannelLocal<Object[]>();
 
-	public ServletServer(ServerManager serverManager) {
+	public AbstractServletChannelHandler(ServerManager serverManager) {
 		this.serverManager = serverManager;
 	}
 

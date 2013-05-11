@@ -1,7 +1,7 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.controllers;
+package org.cruzeira.tests;
 
 import java.util.concurrent.Callable;
 

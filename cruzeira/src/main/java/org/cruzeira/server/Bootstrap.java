@@ -23,6 +23,12 @@ import org.slf4j.LoggerFactory;
  * Entry point, starts Netty.
  */
 public class Bootstrap {
+	
+	static ServerBootstrap bootstrap;
+	
+	public static void shutdown() {
+		bootstrap.shutdown();
+	}
 
 	/**
 	 * There are 2 arguments: '-p 8080' for port and '-dev' for development mode
@@ -70,7 +76,7 @@ public class Bootstrap {
 		
 		OrderedMemoryAwareThreadPoolExecutor eventExecutor = new OrderedMemoryAwareThreadPoolExecutor(asyncPool, 0, 0, 30, TimeUnit.SECONDS);
 
-		ServerBootstrap bootstrap = new ServerBootstrap(factory);
+		bootstrap = new ServerBootstrap(factory);
 		new OpenWebJar();
 
 		bootstrap.setPipelineFactory(new PipelineFactory(eventExecutor, devMode));

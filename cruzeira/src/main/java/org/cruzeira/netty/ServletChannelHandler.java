@@ -16,14 +16,13 @@ import org.slf4j.LoggerFactory;
  * doesn't handle asyncronous requests, it's an AsyncServer job. It doesn't
  * handle file resources requests, it's a FileServer job.
  * 
- * @see AsyncServer
- * @see FileServer
- * @see ServletServe
+ * @see AsyncServletChannelHandler
+ * @see ResourcesChannelHandler
  */
-public class NettyServer extends ServletServer {
+public class ServletChannelHandler extends AbstractServletChannelHandler {
 
 //	private boolean readingChunks;
-	final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+	final Logger logger = LoggerFactory.getLogger(ServletChannelHandler.class);
 	
 	/**
 	 * In development there is class loader reloading and a limited number of
@@ -32,7 +31,7 @@ public class NettyServer extends ServletServer {
 	 */
 	private boolean devMode;
 
-	public NettyServer(ServerManager serverManager, boolean devMode) {
+	public ServletChannelHandler(ServerManager serverManager, boolean devMode) {
 		super(serverManager);
 		this.devMode = devMode;
 	}

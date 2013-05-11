@@ -22,7 +22,6 @@ import static org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -59,12 +58,12 @@ import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 /**
  * 
  */
-public class FileServer extends SimpleChannelUpstreamHandler {
+public class ResourcesChannelHandler extends SimpleChannelUpstreamHandler {
 
-	public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
-	public static final String HTTP_DATE_GMT_TIMEZONE = "GMT";
-	public static final int HTTP_CACHE_SECONDS = 60;
-	private static ConfigurableMimeFileTypeMap mimeMap = new ConfigurableMimeFileTypeMap();
+	public final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+	public final String HTTP_DATE_GMT_TIMEZONE = "GMT";
+	public final int HTTP_CACHE_SECONDS = 60;
+	private final ConfigurableMimeFileTypeMap mimeMap = new ConfigurableMimeFileTypeMap();
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
@@ -94,9 +93,7 @@ public class FileServer extends SimpleChannelUpstreamHandler {
 			return;
 		}
 
-		File file;
-		InputStream inputStream = null;
-		file = new File(path);
+		File file = new File(path);
 		if (file.isHidden() || !file.exists()) {
 			sendError(ctx, NOT_FOUND);
 			return;
@@ -128,21 +125,16 @@ public class FileServer extends SimpleChannelUpstreamHandler {
 		setDateAndCacheHeaders(response, file);
 
 		RandomAccessFile raf = null;
-		long fileLength = 0;
-		if (inputStream == null) {
-			try {
-				raf = new RandomAccessFile(file, "r");
-			} catch (FileNotFoundException fnfe) {
-				sendError(ctx, NOT_FOUND);
-				return;
-			}
-			fileLength = raf.length();
-			setContentLength(response, fileLength);
+		try {
+			raf = new RandomAccessFile(file, "r");
+		} catch (FileNotFoundException fnfe) {
+			sendError(ctx, NOT_FOUND);
+			return;
 		}
+		long fileLength = raf.length();
+		setContentLength(response, fileLength);
 
 		Channel ch = e.getChannel();
-
-		// Write the initial line and the header.
 		ch.write(response);
 
 		// Write the content.
@@ -161,7 +153,6 @@ public class FileServer extends SimpleChannelUpstreamHandler {
 				}
 
 				public void operationProgressed(ChannelFuture future, long amount, long current, long total) {
-					System.out.printf("%s: %d / %d (+%d)%n", path, current, total, amount);
 				}
 			});
 		}

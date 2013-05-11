@@ -14,7 +14,7 @@
      http://www.springframework.org/schema/mvc
      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="org.cruzeira.controllers"/>
+    <context:component-scan base-package="org.cruzeira.tests"/>
     <mvc:annotation-driven>
     	<mvc:async-support default-timeout="10" task-executor="asyncTaskExecutor">
     	    <mvc:callable-interceptors>
