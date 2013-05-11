@@ -4,6 +4,7 @@
 package org.cruzeira.netty;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
@@ -28,6 +29,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void favicon() throws Exception {
 		try {
 			get("/favicon.ico");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.NOT_FOUND.getCode(), e.getStatusCode());
 		}
@@ -37,6 +39,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void notFound() throws Exception {
 		try {
 			get("/resources/notFound.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.NOT_FOUND.getCode(), e.getStatusCode());
 		}
@@ -46,6 +49,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void directory() throws Exception {
 		try {
 			get("/resources/dir");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
 		}
@@ -55,6 +59,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void webjar() throws Exception {
 		try {
 			get("/webjars/some");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.NOT_FOUND.getCode(), e.getStatusCode());
 		}
@@ -80,6 +85,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void security() throws Exception {
 		try {
 			get("/resources/dir/../../somefile.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
 		}
@@ -88,7 +94,8 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	@Test
 	public void security2() throws Exception {
 		try {
-			get("./resources/resource.txt");
+			get("/resources/resource.txt/..");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
 		}
@@ -97,7 +104,8 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	@Test
 	public void security3() throws Exception {
 		try {
-			get("/resources/resource.txt/..");
+			get("/resources/dir./file.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
 		}
@@ -106,16 +114,8 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	@Test
 	public void security4() throws Exception {
 		try {
-			get("/resources/dir./file.txt");
-		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
-		}
-	}
-
-	@Test
-	public void security5() throws Exception {
-		try {
 			get("/resources/dir/.file.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
 		}
@@ -127,6 +127,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void delete() throws Exception {
 		try {
 			delete("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -136,6 +137,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void post() throws Exception {
 		try {
 			post("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -145,6 +147,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void put() throws Exception {
 		try {
 			put("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -154,6 +157,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void options() throws Exception {
 		try {
 			options("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -163,6 +167,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void patch() throws Exception {
 		try {
 			patch("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -172,6 +177,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void head() throws Exception {
 		try {
 			head("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}
@@ -181,6 +187,7 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 	public void trace() throws Exception {
 		try {
 			trace("/resources/resource.txt");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.METHOD_NOT_ALLOWED.getCode(), e.getStatusCode());
 		}

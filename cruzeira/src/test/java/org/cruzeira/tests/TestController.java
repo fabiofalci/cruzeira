@@ -31,6 +31,11 @@ public class TestController {
 		return "sub/sub";
 	}
 
+	@RequestMapping("/jspIncludesNotFound")
+	public String jspIncludeNotFound() {
+		return "notFoundInclude";
+	}
+
 	@RequestMapping("/async")
 	public Callable<String> async() {
 		return new Callable<String>() {

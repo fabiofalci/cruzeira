@@ -43,7 +43,7 @@ public class RequestDispatcher1 implements RequestDispatcher {
 			jspObject.init(webContext.getServletConfig());
 			jspObject.service(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ServletException(e);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class RequestDispatcher1 implements RequestDispatcher {
 			jspObject.init(webContext.getServletConfig());
 			jspObject.service(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ServletException(e);
 		}
 	}
 

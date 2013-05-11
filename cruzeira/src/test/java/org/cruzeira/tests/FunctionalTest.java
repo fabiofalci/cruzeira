@@ -3,7 +3,9 @@
  */
 package org.cruzeira.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -74,6 +76,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 	public void runtimeException() throws Exception {
 		try {
 			get("/runtimeException");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
 		}
@@ -83,6 +86,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 	public void exception() throws Exception {
 		try {
 			get("/exception");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
 		}
@@ -92,6 +96,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 	public void error() throws Exception {
 		try {
 			get("/error");
+			fail();
 		} catch (HttpResponseException e) {
 			assertEquals(HttpResponseStatus.NOT_IMPLEMENTED.getCode(), e.getStatusCode());
 		}		
@@ -113,6 +118,16 @@ public class FunctionalTest extends AbstractFunctionalTest {
 	public void jspWithInclude() {
 		String response = getOrFail("/jspWithInclude");
 		assertEquals("1 JSP file 2 JSP file 3 JSP file 4 JSP file", response.trim());
+	}
+	
+	@Test
+	public void jspIncludesNotFound() throws Exception {
+		try {
+			get("/jspIncludesNotFound");
+			fail();
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+		}		
 	}
 	
 }
