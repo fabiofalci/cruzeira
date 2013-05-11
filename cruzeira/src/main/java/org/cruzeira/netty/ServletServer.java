@@ -3,7 +3,6 @@
  */
 package org.cruzeira.netty;
 
-import static org.jboss.netty.handler.codec.http.HttpHeaders.isKeepAlive;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.COOKIE;
 import static org.jboss.netty.handler.codec.http.HttpHeaders.Names.SET_COOKIE;
@@ -185,7 +184,7 @@ public class ServletServer extends SimpleChannelHandler {
 
 	protected void writeResponse(MessageEvent e, HttpRequest request, StringBuilder buf, Object servletRequest, Object servletResponse) {
 		// Decide whether to close the connection or not.
-		boolean keepAlive = isKeepAlive(request);
+//		boolean keepAlive = isKeepAlive(request);
 
 		// Build the response object.
 		HttpResponse response = null;

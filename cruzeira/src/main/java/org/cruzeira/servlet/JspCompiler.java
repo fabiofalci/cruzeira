@@ -23,8 +23,7 @@ import org.apache.jasper.JspC;
  */
 public class JspCompiler {
 
-	public JspCompiler() throws IOException {
-		String uriRoot = "./src/main/java/views";
+	public JspCompiler(String uriRoot, String output) throws IOException {
 		if (!Paths.get(uriRoot).toFile().exists()) {
 			return;	
 		}
@@ -33,7 +32,7 @@ public class JspCompiler {
 		jspc.setWebXmlFragment("/target/webfrag.xml");
 		jspc.setUriroot(uriRoot);
 		jspc.setPackage("views");
-		jspc.setOutputDir("./src/main/java");
+		jspc.setOutputDir(output);
 		jspc.setValidateXml(false);
 		jspc.setClassPath(null);
 		jspc.setCompile(false);
@@ -85,7 +84,8 @@ public class JspCompiler {
 
 	public static void main(String[] args) {
 		try {
-			new JspCompiler();
+			new JspCompiler("./src/main/java/views", "./src/main/java");
+			new JspCompiler("./src/test/java/views", "./src/test/java");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
