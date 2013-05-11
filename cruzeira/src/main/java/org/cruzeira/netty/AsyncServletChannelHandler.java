@@ -3,6 +3,8 @@
  */
 package org.cruzeira.netty;
 
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+
 import org.cruzeira.server.QueueExecutor;
 import org.cruzeira.server.ServerManager;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -42,11 +44,12 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 			logger.info("Request, response, runnable: {}, {}, {}", servlets[0], servlets[1], runnable);
 			QueueExecutor.futures.remove(servlets[1]);
 			runnable.run();
-		} catch (Exception e) {
-			e.printStackTrace();
+			servlets = doServlet(ctx, event, buf, servlets[0], servlets[1]);
+		} catch (Throwable t) {
+			logger.info(t.getMessage());
+			sendError(ctx, INTERNAL_SERVER_ERROR);
+			return;
 		}
-
-		servlets = doServlet(ctx, event, buf, servlets[0], servlets[1]);
 
 		HttpRequest request = (HttpRequest) event.getMessage();
 		if (servlets == null) {

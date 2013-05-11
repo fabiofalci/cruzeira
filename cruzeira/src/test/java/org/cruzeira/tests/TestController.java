@@ -46,6 +46,36 @@ public class TestController {
 		};
 	}
 	
+	@RequestMapping("/asyncIncludeNotFound")
+	public Callable<String> asyncIncludeNotFound() {
+		return new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return "notFoundInclude";
+			}
+		};
+	}
+	
+	@RequestMapping("/asyncRuntimeException")
+	public Callable<String> asyncRuntimeException() {
+		return new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				throw new RuntimeException("On purpose");
+			}
+		};
+	}
+	
+	@RequestMapping("/asyncException")
+	public Callable<String> asyncException() {
+		return new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				throw new Exception("On purpose");
+			}
+		};
+	}
+	
 	@RequestMapping("/runtimeException")
 	public String runtimeException() {
 		throw new RuntimeException("On purpose");

@@ -130,4 +130,33 @@ public class FunctionalTest extends AbstractFunctionalTest {
 		}		
 	}
 	
+	@Test
+	public void asyncIncludesNotFound() throws Exception {
+		try {
+			get("/asyncIncludeNotFound");
+			fail();
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+		}		
+	}
+	
+	@Test
+	public void asyncRuntimeException() throws Exception {
+		try {
+			get("/asyncRuntimeException");
+			fail();
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+		}		
+	}
+	
+	@Test
+	public void asyncException() throws Exception {
+		try {
+			get("/asyncException");
+			fail();
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+		}		
+	}
 }

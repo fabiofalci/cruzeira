@@ -180,7 +180,6 @@ public class ResourcesChannelHandler extends SimpleChannelUpstreamHandler {
 	}
 
 	private static String sanitizeUri(String uri) {
-		// Decode the path.
 		try {
 			uri = URLDecoder.decode(uri, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
