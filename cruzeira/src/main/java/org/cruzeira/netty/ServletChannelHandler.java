@@ -3,6 +3,8 @@
  */
 package org.cruzeira.netty;
 
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+
 import org.cruzeira.server.ServerManager;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
@@ -42,14 +44,19 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
 			serverManager.beforeRequest();
 		}
 		HttpRequest request = (HttpRequest) event.getMessage();
-		if (request.getUri().startsWith("/resources/")) {
-			return;
-		}
-
+		
 		// is100ContinueExpected(request);
 		StringBuilder buf = new StringBuilder();
 
-		Object[] servlets = doServlet(ctx, event, request, buf);
+		Object[] servlets = null;
+		try {
+			servlets = doServlet(ctx, event, request, buf);
+		} catch (Throwable t) {
+			logger.info(t.getMessage());
+			sendError(ctx, INTERNAL_SERVER_ERROR);
+			return;
+		}
+		
 		if (servlets == null) {
 		} else if (servlets[2] == Boolean.TRUE) {
 			ctx.sendUpstream(event);

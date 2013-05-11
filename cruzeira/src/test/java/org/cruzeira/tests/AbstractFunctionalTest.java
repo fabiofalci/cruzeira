@@ -5,6 +5,7 @@ package org.cruzeira.tests;
 
 import static org.junit.Assert.fail;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpDelete;
@@ -32,7 +33,7 @@ public class AbstractFunctionalTest {
 
 	public static void startServer() {
 		// start the applicatoin
-		Bootstrap.main(null);
+		Bootstrap.main(new String[] { "-dev" });
 		client = new DefaultHttpClient();
 	}
 
@@ -44,10 +45,36 @@ public class AbstractFunctionalTest {
 	 * Execute get or fail!
 	 */
 	public String getOrFail(String mapping) {
-		HttpGet get = new HttpGet(url + mapping);
-		ResponseHandler<String> handler = new BasicResponseHandler();
 		try {
-			return client.execute(get, handler);
+			return execAndReturnString(new HttpGet(url + mapping));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} 
+		return null;
+	}
+
+	public HttpResponse getResponseOrFail(String mapping) {
+		HttpGet get = new HttpGet(url + mapping);
+		try {
+			return client.execute(get);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		return null;
+	}
+
+	/**
+	 * Execute a get or fail! The last parameter, header, must be multiple of 2
+	 * because it is 'name, value, name, value, etc'.
+	 */
+	public HttpResponse getResponseOrFail(String mapping, String...header) {
+		HttpGet get = new HttpGet(url + mapping);
+		for (int i = 0; i < header.length; i += 2) {
+			get.setHeader(header[i], header[i + 1]);
+		}
+		try {
+			return client.execute(get);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -58,6 +85,14 @@ public class AbstractFunctionalTest {
 	public String execAndReturnString(HttpUriRequest request) throws Exception {
 		ResponseHandler<String> handler = new BasicResponseHandler();
 		return client.execute(request, handler);
+	}
+	
+	public void consume(HttpResponse response) {
+		try {
+			response.getEntity().getContent().close();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	public String get(String mapping) throws Exception {
@@ -79,7 +114,7 @@ public class AbstractFunctionalTest {
 	public String options(String mapping) throws Exception {
 		return execAndReturnString(new HttpOptions(url + mapping));
 	}
-	
+
 	public String patch(String mapping) throws Exception {
 		return execAndReturnString(new HttpPatch(url + mapping));
 	}

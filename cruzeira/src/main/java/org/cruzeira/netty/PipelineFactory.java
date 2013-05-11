@@ -5,6 +5,7 @@ package org.cruzeira.netty;
 
 import java.util.concurrent.Executor;
 
+import org.cruzeira.context.WebContext;
 import org.cruzeira.server.ServerManager;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
@@ -51,6 +52,10 @@ public class PipelineFactory implements ChannelPipelineFactory {
 		pipeline.addLast("pipelineExecutor", new ExecutionHandler(pipelineExecutor));
 		pipeline.addLast("asyncHandler", new AsyncServletChannelHandler(serverManager));
 		return pipeline;
+	}
+
+	public void shutdown() {
+		((WebContext) this.serverManager.getSpringContext()).shutdown();
 	}
 
 }

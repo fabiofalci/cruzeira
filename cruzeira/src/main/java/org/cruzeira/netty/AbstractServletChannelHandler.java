@@ -68,34 +68,30 @@ public class AbstractServletChannelHandler extends SimpleChannelHandler {
 		this.serverManager = serverManager;
 	}
 
-	protected Object[] doServlet(ChannelHandlerContext ctx, MessageEvent event, HttpRequest request, StringBuilder buf) {
-		try {
-			Class<?> stringClass = getClassLoader().loadClass("java.lang.String");
-			Class<?> byteArrayClass = Array.newInstance(byte.class, 0).getClass();
-			Class<?> webContextClass = getClassLoader().loadClass(WebContext.class.getName());
-			Class<?> servletRequestClass = getClassLoader().loadClass(ServletRequest1.class.getName());
-			Class<?> servletResponseClass = getClassLoader().loadClass(ServletResponse1.class.getName());
+	protected Object[] doServlet(ChannelHandlerContext ctx, MessageEvent event, HttpRequest request, StringBuilder buf) throws Exception {
+		Class<?> stringClass = getClassLoader().loadClass("java.lang.String");
+		Class<?> byteArrayClass = Array.newInstance(byte.class, 0).getClass();
+		Class<?> webContextClass = getClassLoader().loadClass(WebContext.class.getName());
+		Class<?> servletRequestClass = getClassLoader().loadClass(ServletRequest1.class.getName());
+		Class<?> servletResponseClass = getClassLoader().loadClass(ServletResponse1.class.getName());
 
-			Class<?> httpSessionClass = getClassLoader().loadClass("javax.servlet.http.HttpSession");
+		Class<?> httpSessionClass = getClassLoader().loadClass("javax.servlet.http.HttpSession");
 
-			Object springContext = getSpringContext();
-			Object servletContext = springContext.getClass().getMethod("getServletContext").invoke(springContext);
-			Object httpSession = createHttpSession(request, servletContext);
+		Object springContext = getSpringContext();
+		Object servletContext = springContext.getClass().getMethod("getServletContext").invoke(springContext);
+		Object httpSession = createHttpSession(request, servletContext);
 
-			Constructor<?> constructor = servletRequestClass.getConstructor(stringClass, webContextClass, stringClass, byteArrayClass,
-					stringClass, httpSessionClass);
-			String method = request.getMethod().getName();
-			byte[] array = request.getContent().array();
-			String contentType = request.getHeader("Content-type");
-			Object servletRequest = constructor.newInstance(request.getUri(), getSpringContext(), method, array, contentType, httpSession);
-			buildServletRequestHeader(servletRequest, request);
-			Object servletResponse = servletResponseClass.newInstance();
+		Constructor<?> constructor = servletRequestClass.getConstructor(stringClass, webContextClass,
+				stringClass, byteArrayClass, stringClass, httpSessionClass);
+		String method = request.getMethod().getName();
+		byte[] array = request.getContent().array();
+		String contentType = request.getHeader("Content-type");
+		Object servletRequest = constructor.newInstance(request.getUri(), getSpringContext(), method, array,
+				contentType, httpSession);
+		buildServletRequestHeader(servletRequest, request);
+		Object servletResponse = servletResponseClass.newInstance();
 
-			return doServlet(ctx, event, buf, servletRequest, servletResponse);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return doServlet(ctx, event, buf, servletRequest, servletResponse);
 	}
 
 	public void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
@@ -267,7 +263,7 @@ public class AbstractServletChannelHandler extends SimpleChannelHandler {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		System.out.println("Exception caught");
+		logger.info("Exception caught " + e);
 		e.getCause().printStackTrace();
 
 		Channel ch = e.getChannel();

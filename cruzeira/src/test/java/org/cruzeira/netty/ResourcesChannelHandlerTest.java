@@ -3,11 +3,14 @@
  */
 package org.cruzeira.netty;
 
+import static org.junit.Assert.assertEquals;
+
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 import org.cruzeira.tests.AbstractFunctionalTest;
+import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.AfterClass;
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
@@ -66,8 +69,56 @@ public class ResourcesChannelHandlerTest extends AbstractFunctionalTest {
 
 	@Test
 	public void resourceNotModified() {
-		getOrFail("/resources/resource.txt");
-		getOrFail("/resources/resource.txt");
+		HttpResponse response = getResponseOrFail("/resources/resource.txt");
+		String date = response.getFirstHeader(HttpHeaders.Names.LAST_MODIFIED).getValue();
+		consume(response);
+		response = getResponseOrFail("/resources/resource.txt", HttpHeaders.Names.IF_MODIFIED_SINCE, date);
+		assertEquals(HttpResponseStatus.NOT_MODIFIED.getCode(), response.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void security() throws Exception {
+		try {
+			get("/resources/dir/../../somefile.txt");
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
+		}
+	}
+
+	@Test
+	public void security2() throws Exception {
+		try {
+			get("./resources/resource.txt");
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
+		}
+	}
+
+	@Test
+	public void security3() throws Exception {
+		try {
+			get("/resources/resource.txt/..");
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
+		}
+	}
+
+	@Test
+	public void security4() throws Exception {
+		try {
+			get("/resources/dir./file.txt");
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
+		}
+	}
+
+	@Test
+	public void security5() throws Exception {
+		try {
+			get("/resources/dir/.file.txt");
+		} catch (HttpResponseException e) {
+			assertEquals(HttpResponseStatus.FORBIDDEN.getCode(), e.getStatusCode());
+		}
 	}
 
 	// only get is supported!

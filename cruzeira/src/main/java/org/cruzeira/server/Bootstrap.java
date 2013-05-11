@@ -25,8 +25,10 @@ import org.slf4j.LoggerFactory;
 public class Bootstrap {
 	
 	static ServerBootstrap bootstrap;
+	static PipelineFactory pipeline;
 	
 	public static void shutdown() {
+		pipeline.shutdown();
 		bootstrap.shutdown();
 	}
 
@@ -79,7 +81,8 @@ public class Bootstrap {
 		bootstrap = new ServerBootstrap(factory);
 		new OpenWebJar();
 
-		bootstrap.setPipelineFactory(new PipelineFactory(eventExecutor, devMode));
+		pipeline = new PipelineFactory(eventExecutor, devMode);
+		bootstrap.setPipelineFactory(pipeline);
 
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", false);

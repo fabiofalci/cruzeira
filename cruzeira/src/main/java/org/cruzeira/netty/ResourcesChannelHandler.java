@@ -187,7 +187,7 @@ public class ResourcesChannelHandler extends SimpleChannelUpstreamHandler {
 			try {
 				uri = URLDecoder.decode(uri, "ISO-8859-1");
 			} catch (UnsupportedEncodingException e1) {
-				throw new Error();
+				return null; 
 			}
 		}
 
@@ -196,7 +196,8 @@ public class ResourcesChannelHandler extends SimpleChannelUpstreamHandler {
 
 		// Simplistic dumb security check.
 		// You will have to do something serious in the production environment.
-		if (uri.contains(File.separator + '.') || uri.contains('.' + File.separator) || uri.startsWith(".") || uri.endsWith(".")) {
+		if (uri.contains(File.separator + '.') || uri.contains('.' + File.separator) || uri.startsWith(".")
+				|| uri.endsWith(".")) {
 			return null;
 		}
 
