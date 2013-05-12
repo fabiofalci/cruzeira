@@ -21,9 +21,6 @@ import org.slf4j.LoggerFactory;
  * classes. Additionally it provides access to spring context and its dispatcher
  * servlet. Maybe it should be divided in more classes.
  * 
- * <p>
- * The reload feature it is supposed to be used only in development.
- * 
  */
 public class ServerManager {
 
