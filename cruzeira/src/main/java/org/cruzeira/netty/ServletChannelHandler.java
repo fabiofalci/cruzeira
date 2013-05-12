@@ -52,7 +52,7 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
 		try {
 			servlets = doServlet(ctx, event, request, buf);
 		} catch (Throwable t) {
-			logger.info(t.getMessage());
+			logger.error(t.getMessage(), t);
 			sendError(ctx, INTERNAL_SERVER_ERROR);
 			return;
 		}

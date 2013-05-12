@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 
 /**
- * 
+ * Reference: org.jboss.netty.example.http.file.HttpStaticFileServerHandler
  */
 public class ResourcesChannelHandler extends SimpleChannelUpstreamHandler {
 

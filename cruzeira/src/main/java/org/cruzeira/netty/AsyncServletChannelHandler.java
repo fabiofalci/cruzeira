@@ -46,7 +46,7 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 			runnable.run();
 			servlets = doServlet(ctx, event, buf, servlets[0], servlets[1]);
 		} catch (Throwable t) {
-			logger.info(t.getMessage());
+			logger.error(t.getMessage(), t);
 			sendError(ctx, INTERNAL_SERVER_ERROR);
 			return;
 		}
