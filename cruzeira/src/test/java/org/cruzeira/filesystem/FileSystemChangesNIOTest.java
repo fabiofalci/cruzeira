@@ -35,6 +35,7 @@ public class FileSystemChangesNIOTest {
 			Files.deleteIfExists(Paths.get(basePath + "/subdir1"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp.txt"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp1.txt"));
+			Files.deleteIfExists(Paths.get(basePath + "/tmp2.text"));
 			Files.deleteIfExists(path);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -148,6 +149,100 @@ public class FileSystemChangesNIOTest {
 		sleep();
 
 		Assert.assertTrue(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void ignoreNewFile() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void ignoreReload() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+		
+		fileSystemChanges.reload();
+		createFile(basePath + "/tmp1.txt");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+
+	@Test
+	public void ignoreDeleteFile() {
+		Path file = createFile(basePath + "/tmp.txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		try {
+			Files.deleteIfExists(file);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+
+	@Test
+	public void ignoreEditFile() {
+		Path file = createFile(basePath + "/tmp.txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file.toFile()));
+			writer.append("Edited");
+			writer.close();
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+
+		sleep();
+
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void ignoreNewFileSubdir() {
+		Path path = createDir(basePath + "/subdir1/subdir2");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		createFile(path + "/subfiletmp.txt");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+
+	@Test
+	public void ignoreDeleteFileSubdir() {
+		Path path = createDir(basePath + "/subdir1/subdir2");
+		Path file = createFile(path + "/subfiletmp.txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		try {
+			Files.deleteIfExists(file);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+
+	@Test
+	public void ignoreEditFileSubdir() {
+		Path path = createDir(basePath + "/subdir1/subdir2");
+		Path file = createFile(path + "/subfiletmp.txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file.toFile()));
+			writer.append("Edited");
+			writer.close();
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+
+		sleep();
+
+		Assert.assertFalse(fileSystemChanges.hasChanges());
 	}
 
 	private void sleep() {
