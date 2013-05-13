@@ -102,7 +102,7 @@ public class FileSystemChangesNIO implements FileSystemChanges {
 			Path path = (Path) event.context();
 			String name = path.getFileName().toString();
 			int index = name.indexOf(".");
-			if (index != -1 && types.contains(name.substring(index + 1))) {
+			if (index != -1 && types.contains(name.substring(index))) {
 				return true;
 			}
 		}

@@ -35,7 +35,7 @@ public class FileSystemChangesNIOTest {
 			Files.deleteIfExists(Paths.get(basePath + "/subdir1"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp.txt"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp1.txt"));
-			Files.deleteIfExists(Paths.get(basePath + "/tmp2.text"));
+			Files.deleteIfExists(Paths.get(basePath + "/tmp2.readme"));
 			Files.deleteIfExists(path);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -55,6 +55,18 @@ public class FileSystemChangesNIOTest {
 		createFile(basePath + "/tmp.txt");
 		sleep();
 		Assert.assertTrue(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void newFileWithIgnore() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertTrue(fileSystemChanges.hasChanges());
+		
+		createFile(basePath + "/tmp2.readme");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
 	}
 	
 	@Test
@@ -153,7 +165,7 @@ public class FileSystemChangesNIOTest {
 	
 	@Test
 	public void ignoreNewFile() {
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		createFile(basePath + "/tmp.txt");
 		sleep();
 		Assert.assertFalse(fileSystemChanges.hasChanges());
@@ -161,7 +173,7 @@ public class FileSystemChangesNIOTest {
 	
 	@Test
 	public void ignoreReload() {
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		createFile(basePath + "/tmp.txt");
 		sleep();
 		Assert.assertFalse(fileSystemChanges.hasChanges());
@@ -175,7 +187,7 @@ public class FileSystemChangesNIOTest {
 	@Test
 	public void ignoreDeleteFile() {
 		Path file = createFile(basePath + "/tmp.txt");
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		try {
 			Files.deleteIfExists(file);
 		} catch (IOException e) {
@@ -188,7 +200,7 @@ public class FileSystemChangesNIOTest {
 	@Test
 	public void ignoreEditFile() {
 		Path file = createFile(basePath + "/tmp.txt");
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file.toFile()));
@@ -206,7 +218,7 @@ public class FileSystemChangesNIOTest {
 	@Test
 	public void ignoreNewFileSubdir() {
 		Path path = createDir(basePath + "/subdir1/subdir2");
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		createFile(path + "/subfiletmp.txt");
 		sleep();
 		Assert.assertFalse(fileSystemChanges.hasChanges());
@@ -216,7 +228,7 @@ public class FileSystemChangesNIOTest {
 	public void ignoreDeleteFileSubdir() {
 		Path path = createDir(basePath + "/subdir1/subdir2");
 		Path file = createFile(path + "/subfiletmp.txt");
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		try {
 			Files.deleteIfExists(file);
 		} catch (IOException e) {
@@ -230,7 +242,7 @@ public class FileSystemChangesNIOTest {
 	public void ignoreEditFileSubdir() {
 		Path path = createDir(basePath + "/subdir1/subdir2");
 		Path file = createFile(path + "/subfiletmp.txt");
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file.toFile()));
