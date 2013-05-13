@@ -36,6 +36,7 @@ public class FileSystemChangesNIOTest {
 			Files.deleteIfExists(Paths.get(basePath + "/tmp.txt"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp1.txt"));
 			Files.deleteIfExists(Paths.get(basePath + "/tmp2.readme"));
+			Files.deleteIfExists(Paths.get(basePath + "/tmp"));
 			Files.deleteIfExists(path);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,15 +59,11 @@ public class FileSystemChangesNIOTest {
 	}
 	
 	@Test
-	public void newFileWithIgnore() {
-		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
-		createFile(basePath + "/tmp.txt");
+	public void newNoTypeFile() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath);
+		createFile(basePath + "/tmp");
 		sleep();
 		Assert.assertTrue(fileSystemChanges.hasChanges());
-		
-		createFile(basePath + "/tmp2.readme");
-		sleep();
-		Assert.assertFalse(fileSystemChanges.hasChanges());
 	}
 	
 	@Test
@@ -172,6 +169,14 @@ public class FileSystemChangesNIOTest {
 	}
 	
 	@Test
+	public void ignoreNewNoTypeFile() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
+		createFile(basePath + "/tmp");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
 	public void ignoreReload() {
 		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".doc");
 		createFile(basePath + "/tmp.txt");
@@ -255,6 +260,24 @@ public class FileSystemChangesNIOTest {
 		sleep();
 
 		Assert.assertFalse(fileSystemChanges.hasChanges());
+	}
+	
+	@Test
+	public void newFileWithIgnoreAndReload() {
+		FileSystemChangesNIO fileSystemChanges = new FileSystemChangesNIO(basePath, ".txt");
+		createFile(basePath + "/tmp.txt");
+		sleep();
+		Assert.assertTrue(fileSystemChanges.hasChanges());
+		
+		createFile(basePath + "/tmp2.readme");
+		sleep();
+		Assert.assertFalse(fileSystemChanges.hasChanges());
+		
+		fileSystemChanges.reload();
+		
+		createFile(basePath + "/tmp1.txt");
+		sleep();
+		Assert.assertTrue(fileSystemChanges.hasChanges());
 	}
 
 	private void sleep() {
