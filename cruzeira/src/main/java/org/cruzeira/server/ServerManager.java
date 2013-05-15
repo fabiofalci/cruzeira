@@ -33,7 +33,7 @@ public class ServerManager {
 	final Logger logger = LoggerFactory.getLogger(ServerManager.class);
 
 	public ServerManager() {
-		this(new FileSystemChangesNIO("src", ".java", ".class", ".xml", ".properties"), null);
+		this(new FileSystemChangesNIO("src", ".java", ".class", ".xml", ".properties", ".jsp"), null);
 	}
 	
 	public ServerManager(FileSystemChanges fileSystemChanges, Class<? extends WebContext> webContextClass) {
