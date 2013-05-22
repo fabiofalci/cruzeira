@@ -33,5 +33,10 @@ public class MyController {
 		logger.info("Running controller...");
 		return "controller";
 	}
+	
+	@RequestMapping("/scriptlets")
+	public String scriptlets(Model model) {
+		return "scriptlet";
+	}
 
 }
