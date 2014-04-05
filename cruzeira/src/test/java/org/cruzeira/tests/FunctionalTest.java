@@ -14,8 +14,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jboss.netty.handler.codec.http.HttpHeaders;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class FunctionalTest extends AbstractFunctionalTest {
 
 	static {

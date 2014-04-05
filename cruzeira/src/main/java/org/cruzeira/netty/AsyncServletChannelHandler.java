@@ -3,15 +3,17 @@
  */
 package org.cruzeira.netty;
 
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
-
 import org.cruzeira.server.QueueExecutor;
 import org.cruzeira.server.ServerManager;
+import org.cruzeira.servlet.ServletRequest1;
+import org.cruzeira.servlet.ServletResponse1;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 
 /**
  * This ChannelHandler handles Servlet async requests. It should not run on a
@@ -44,7 +46,7 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 			logger.info("Request, response, runnable: {}, {}, {}", servlets[0], servlets[1], runnable);
 			QueueExecutor.futures.remove(servlets[1]);
 			runnable.run();
-			servlets = doServlet(ctx, event, buf, servlets[0], servlets[1]);
+			servlets = doServlet(ctx, event, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
 		} catch (Throwable t) {
 			logger.error(t.getMessage(), t);
 			sendError(ctx, INTERNAL_SERVER_ERROR);
@@ -56,7 +58,7 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 		} else if (request.isChunked()) {
 			// readingChunks = true;
 		} else {
-			writeResponse(event, request, buf, servlets[0], servlets[1]);
+			writeResponse(event, request, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
 		}
 	}
 

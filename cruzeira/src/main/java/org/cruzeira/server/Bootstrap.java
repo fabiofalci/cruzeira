@@ -81,7 +81,7 @@ public class Bootstrap {
 		bootstrap = new ServerBootstrap(factory);
 		new OpenWebJar();
 
-		pipeline = new PipelineFactory(eventExecutor, devMode);
+		pipeline = new PipelineFactory(eventExecutor);
 		bootstrap.setPipelineFactory(pipeline);
 
 		bootstrap.setOption("child.tcpNoDelay", true);

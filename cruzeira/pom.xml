@@ -253,7 +253,7 @@
                 <configuration>
                     <argLine>-XX:-UseSplitVerifier</argLine>
                 </configuration>
-            </plugin>      		
+            </plugin>
 
 		</plugins>
 	</build>

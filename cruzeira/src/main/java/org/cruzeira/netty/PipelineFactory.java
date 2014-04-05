@@ -3,9 +3,6 @@
  */
 package org.cruzeira.netty;
 
-import java.util.concurrent.Executor;
-
-import org.cruzeira.context.WebContext;
 import org.cruzeira.server.ServerManager;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
@@ -16,15 +13,15 @@ import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
 import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.jboss.netty.handler.stream.ChunkedWriteHandler;
 
+import java.util.concurrent.Executor;
+
 public class PipelineFactory implements ChannelPipelineFactory {
 	private ServerManager serverManager;
 	private Executor pipelineExecutor;
-	private boolean devMode;
 
-	public PipelineFactory(Executor executor, boolean devMode) {
+	public PipelineFactory(Executor executor) {
 		this.serverManager = new ServerManager();
 		this.pipelineExecutor = executor;
-		this.devMode = devMode;
 	}
 
 	public ChannelPipeline getPipeline() {
@@ -48,14 +45,14 @@ public class PipelineFactory implements ChannelPipelineFactory {
 		pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
 		pipeline.addLast("filehandler", new ResourcesChannelHandler());
 
-		pipeline.addLast("handler", new ServletChannelHandler(serverManager, devMode));
+		pipeline.addLast("handler", new ServletChannelHandler(serverManager));
 		pipeline.addLast("pipelineExecutor", new ExecutionHandler(pipelineExecutor));
 		pipeline.addLast("asyncHandler", new AsyncServletChannelHandler(serverManager));
 		return pipeline;
 	}
 
 	public void shutdown() {
-		((WebContext) this.serverManager.getSpringContext()).shutdown();
+		serverManager.getSpringContext().shutdown();
 	}
 
 }

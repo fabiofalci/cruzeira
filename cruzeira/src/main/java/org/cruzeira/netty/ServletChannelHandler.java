@@ -3,14 +3,16 @@
  */
 package org.cruzeira.netty;
 
-import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
-
 import org.cruzeira.server.ServerManager;
+import org.cruzeira.servlet.ServletRequest1;
+import org.cruzeira.servlet.ServletResponse1;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.handler.codec.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.jboss.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 
 /**
  * The main ChannelHandler of Cruzeira. It receives the HTTP Request, translate
@@ -26,23 +28,12 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
 //	private boolean readingChunks;
 	final Logger logger = LoggerFactory.getLogger(ServletChannelHandler.class);
 	
-	/**
-	 * In development there is class loader reloading and a limited number of
-	 * threads, actually, only one boss thread, one worker thread and one async
-	 * thread. 
-	 */
-	private boolean devMode;
-
-	public ServletChannelHandler(ServerManager serverManager, boolean devMode) {
+	public ServletChannelHandler(ServerManager serverManager) {
 		super(serverManager);
-		this.devMode = devMode;
 	}
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent event) throws Exception {
-		if (devMode) {
-			serverManager.beforeRequest();
-		}
 		HttpRequest request = (HttpRequest) event.getMessage();
 		
 		// is100ContinueExpected(request);
@@ -63,7 +54,7 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
 		} else if (request.isChunked()) {
 //			readingChunks = true;
 		} else {
-			writeResponse(event, request, buf, servlets[0], servlets[1]);
+			writeResponse(event, request, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
 		}
 	}
 
