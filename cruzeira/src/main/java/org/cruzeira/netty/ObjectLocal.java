@@ -3,27 +3,27 @@
  */
 package org.cruzeira.netty;
 
-import java.util.concurrent.ConcurrentMap;
+import io.netty.util.internal.chmv8.ConcurrentHashMapV8;
 
-import org.jboss.netty.util.internal.ConcurrentIdentityWeakKeyHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class ObjectLocal<T> {
 
-	private final ConcurrentMap<Object, T> map = new ConcurrentIdentityWeakKeyHashMap<Object, T>();
+    private final ConcurrentMap<Object, T> map = new ConcurrentHashMapV8<>();
 
-	public T get(Object obj) {
-		return map.get(obj);
-	}
+    public T get(Object obj) {
+        return map.get(obj);
+    }
 
-	public void set(Object obj, T value) {
-		if (value == null) {
-			remove(obj);
-		} else {
-			map.put(obj, value);
-		}
-	}
-	
-	public void remove(Object obj) {
-		map.remove(obj);
-	}
+    public void set(Object obj, T value) {
+        if (value == null) {
+            remove(obj);
+        } else {
+            map.put(obj, value);
+        }
+    }
+
+    public void remove(Object obj) {
+        map.remove(obj);
+    }
 }

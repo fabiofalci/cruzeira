@@ -3,56 +3,41 @@
  */
 package org.cruzeira.netty;
 
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.cruzeira.server.ServerManager;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.handler.codec.http.HttpChunkAggregator;
-import org.jboss.netty.handler.codec.http.HttpRequestDecoder;
-import org.jboss.netty.handler.codec.http.HttpResponseEncoder;
-import org.jboss.netty.handler.execution.ExecutionHandler;
-import org.jboss.netty.handler.stream.ChunkedWriteHandler;
 
-import java.util.concurrent.Executor;
+public class PipelineFactory extends ChannelInitializer<SocketChannel> {
 
-public class PipelineFactory implements ChannelPipelineFactory {
-	private ServerManager serverManager;
-	private Executor pipelineExecutor;
+    private ServerManager serverManager;
+    private int asyncPoolSize;
 
-	public PipelineFactory(Executor executor) {
-		this.serverManager = new ServerManager();
-		this.pipelineExecutor = executor;
-	}
+    public PipelineFactory(int asyncPoolSize) {
+        this.serverManager = new ServerManager();
+        this.asyncPoolSize = asyncPoolSize;
+    }
 
-	public ChannelPipeline getPipeline() {
-		// Create a default pipeline implementation.
-		ChannelPipeline pipeline = Channels.pipeline();
+    @Override
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        ChannelPipeline pipeline = socketChannel.pipeline();
 
-		// Uncomment the following line if you want HTTPS
-		// SSLEngine engine =
-		// SecureChatSslContextFactory.getServerContext().createSSLEngine();
-		// engine.setUseClientMode(false);
-		// pipeline.addLast("ssl", new SslHandler(engine));
+        pipeline.addLast(new HttpServerCodec());
 
-		pipeline.addLast("decoder", new HttpRequestDecoder());
-		// Uncomment the following line if you don't want to handle
-		// HttpChunks.
-		pipeline.addLast("aggregator", new HttpChunkAggregator(65536));
-		pipeline.addLast("encoder", new HttpResponseEncoder());
-		// Remove the following line if you don't want automatic content
-		// compression.
-		// pipeline.addLast("deflater", new HttpContentCompressor());
-		pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
-		pipeline.addLast("filehandler", new ResourcesChannelHandler());
+        pipeline.addLast(new HttpObjectAggregator(65536));
+        pipeline.addLast(new ChunkedWriteHandler());
+        pipeline.addLast(new ResourcesChannelHandler());
+        pipeline.addLast(new ServletChannelHandler(serverManager));
+//        pipeline.addLast(new DefaultEventExecutorGroup(asyncPoolSize), new AsyncServletChannelHandler(serverManager));
+    }
 
-		pipeline.addLast("handler", new ServletChannelHandler(serverManager));
-		pipeline.addLast("pipelineExecutor", new ExecutionHandler(pipelineExecutor));
-		pipeline.addLast("asyncHandler", new AsyncServletChannelHandler(serverManager));
-		return pipeline;
-	}
-
-	public void shutdown() {
-		serverManager.getSpringContext().shutdown();
-	}
+    public void shutdown() {
+        serverManager.getSpringContext().shutdown();
+    }
 
 }

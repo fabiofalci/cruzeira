@@ -33,7 +33,7 @@ public class AbstractFunctionalTest {
 
 	public static void startServer() {
 		// start the applicatoin
-		Bootstrap.main(new String[] { "-dev" });
+		Bootstrap.main(new String[] { "" });
 		client = new DefaultHttpClient();
 	}
 

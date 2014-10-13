@@ -11,8 +11,8 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.jboss.netty.handler.codec.http.HttpHeaders;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.AfterClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -80,7 +80,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/runtimeException");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/exception");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/error");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.NOT_IMPLEMENTED.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.NOT_IMPLEMENTED.code(), e.getStatusCode());
 		}		
 	}
 	
@@ -128,7 +128,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/jspIncludesNotFound");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}		
 	}
 	
@@ -138,7 +138,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/asyncIncludeNotFound");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}		
 	}
 	
@@ -148,7 +148,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/asyncRuntimeException");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}		
 	}
 	
@@ -158,7 +158,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 			get("/asyncException");
 			fail();
 		} catch (HttpResponseException e) {
-			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode(), e.getStatusCode());
+			assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
 		}		
 	}
 }
