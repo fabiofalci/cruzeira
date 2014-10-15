@@ -33,19 +33,6 @@ public class FunctionalTest extends AbstractFunctionalTest {
     public void simple() {
         String response = getOrFail("/simple");
         assertEquals("simple", response);
-
-    }
-
-    @Test
-    public void async() {
-        String response = getOrFail("/async");
-        assertEquals("JSP file", response);
-    }
-
-    @Test
-    public void resource() {
-        String resource = getOrFail("/resources/resource.txt");
-        assertEquals("resource content", resource);
     }
 
     @Test
@@ -108,38 +95,6 @@ public class FunctionalTest extends AbstractFunctionalTest {
     public void printWriter() {
         String str = getOrFail("/printWriter");
         assertEquals("Using print writer response", str);
-    }
-
-    @Test
-    public void jsp() {
-        String response = getOrFail("/jsp");
-        assertEquals("JSP file", response);
-    }
-
-    @Test
-    public void jspWithInclude() {
-        String response = getOrFail("/jspWithInclude");
-        assertEquals("1 JSP file 2 JSP file 3 JSP file 4 JSP file", response.trim());
-    }
-
-    @Test
-    public void jspIncludesNotFound() throws Exception {
-        try {
-            get("/jspIncludesNotFound");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
-    }
-
-    @Test
-    public void asyncIncludesNotFound() throws Exception {
-        try {
-            get("/asyncIncludeNotFound");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
     }
 
     @Test

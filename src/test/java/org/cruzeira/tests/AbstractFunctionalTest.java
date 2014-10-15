@@ -31,7 +31,6 @@ public class AbstractFunctionalTest {
     final String url = "http://localhost:8080";
 
     public static void startServer() {
-        // start the applicatoin
         Bootstrap.main(new String[]{""});
         client = new DefaultHttpClient();
     }

@@ -17,45 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class TestController {
 
     @RequestMapping("/simple")
-    public
-    @ResponseBody
-    String simple() {
+    public @ResponseBody String simple() {
         return "simple";
-    }
-
-    @RequestMapping("/jsp")
-    public String jsp() {
-        return "test";
-    }
-
-    @RequestMapping("/jspWithInclude")
-    public String jspWithInclude() {
-        return "sub/sub";
-    }
-
-    @RequestMapping("/jspIncludesNotFound")
-    public String jspIncludeNotFound() {
-        return "notFoundInclude";
-    }
-
-    @RequestMapping("/async")
-    public Callable<String> async() {
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return "test";
-            }
-        };
-    }
-
-    @RequestMapping("/asyncIncludeNotFound")
-    public Callable<String> asyncIncludeNotFound() {
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return "notFoundInclude";
-            }
-        };
     }
 
     @RequestMapping("/asyncRuntimeException")
