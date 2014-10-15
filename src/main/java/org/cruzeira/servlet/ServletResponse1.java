@@ -3,6 +3,9 @@
  */
 package org.cruzeira.servlet;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,16 +16,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 public class ServletResponse1 implements HttpServletResponse {
 
     private int status = SC_OK;
     private Map<String, List<Object>> header;
     private String contentType = "text/html;charset=UTF-8<";
-    private boolean commited = false;
+    private boolean committed = false;
     private ServletOutputStream1 servletOutputStream;
     private String charset;
     private int bufferSize;
@@ -105,7 +104,7 @@ public class ServletResponse1 implements HttpServletResponse {
     @Override
     public void flushBuffer() throws IOException {
         closeStreams();
-        commited = true;
+        committed = true;
     }
 
     @Override
@@ -116,7 +115,7 @@ public class ServletResponse1 implements HttpServletResponse {
 
     @Override
     public boolean isCommitted() {
-        return commited;
+        return committed;
     }
 
     @Override
@@ -172,10 +171,6 @@ public class ServletResponse1 implements HttpServletResponse {
         return errorStatusCode != null;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
     @Override
     public void sendError(int sc, String msg) throws IOException {
         this.errorStatusCode = sc;
@@ -204,7 +199,7 @@ public class ServletResponse1 implements HttpServletResponse {
 
     @Override
     public void addDateHeader(String name, long date) {
-        Collection col = getHeadersInternal(name);
+        Collection<Object> col = getHeadersInternal(name);
         if (col == null) {
             List<Object> list = new ArrayList<>();
             getHeader().put(name, list);
@@ -222,7 +217,7 @@ public class ServletResponse1 implements HttpServletResponse {
 
     @Override
     public void addHeader(String name, String value) {
-        Collection col = getHeadersInternal(name);
+        Collection<Object> col = getHeadersInternal(name);
         if (col == null) {
             List<Object> list = new ArrayList<>();
             getHeader().put(name, list);
@@ -240,7 +235,7 @@ public class ServletResponse1 implements HttpServletResponse {
 
     @Override
     public void addIntHeader(String name, int value) {
-        Collection col = getHeadersInternal(name);
+        Collection<Object> col = getHeadersInternal(name);
         if (col == null) {
             List<Object> list = new ArrayList<>();
             getHeader().put(name, list);

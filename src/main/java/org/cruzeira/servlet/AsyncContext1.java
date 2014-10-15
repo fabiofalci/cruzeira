@@ -3,9 +3,9 @@
  */
 package org.cruzeira.servlet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -15,11 +15,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of {@link javax.servlet.AsyncContext} that doesn't dispatch
@@ -81,11 +79,11 @@ public class AsyncContext1 implements AsyncContext {
     @Override
     public void complete() {
         try {
-            ((HttpServletResponse) servletResponse).flushBuffer();
+            servletResponse.flushBuffer();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        for (AsyncListener asyncListener : getAsyncListenres()) {
+        for (AsyncListener asyncListener : getAsyncListeners()) {
             try {
                 asyncListener.onComplete(new AsyncEvent(this));
             } catch (IOException e) {
@@ -99,7 +97,7 @@ public class AsyncContext1 implements AsyncContext {
         throw new UnsupportedOperationException();
     }
 
-    private List<AsyncListener> getAsyncListenres() {
+    private List<AsyncListener> getAsyncListeners() {
         if (asyncListeners == null) {
             asyncListeners = new ArrayList<>();
         }
@@ -108,7 +106,7 @@ public class AsyncContext1 implements AsyncContext {
 
     @Override
     public void addListener(AsyncListener listener) {
-        getAsyncListenres().add(listener);
+        getAsyncListeners().add(listener);
     }
 
     @Override

@@ -3,6 +3,23 @@
  */
 package org.cruzeira.servlet;
 
+import io.netty.handler.codec.http.QueryStringDecoder;
+import org.cruzeira.context.WebContext;
+import org.springframework.util.Assert;
+
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -19,30 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.DispatcherType;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
-import org.cruzeira.context.WebContext;
-import io.netty.handler.codec.http.QueryStringDecoder;
-import org.springframework.util.Assert;
-
-
-/**
- *
- *
- */
 public class ServletRequest1 implements HttpServletRequest {
 
     final private String requestURI;
@@ -54,12 +48,12 @@ public class ServletRequest1 implements HttpServletRequest {
     final private String contentType;
     final private HttpSession httpSession;
 
-    private Map<String, Object> atttributes;
+    private Map<String, Object> attributes;
     private ServletInputStream1 servletInputStream;
     private BufferedReader reader;
     private Map<String, List<Object>> header;
     private AsyncContext asyncContext;
-    private String characterEnconding = "utf-8";
+    private String characterEncoding = "utf-8";
 
     public ServletRequest1(String uri, WebContext webContext, String method, byte[] contentArray, String contentType, HttpSession httpSession) {
         Assert.notNull(uri, "Request URI cannot be null");
@@ -108,10 +102,6 @@ public class ServletRequest1 implements HttpServletRequest {
         this.httpSession = httpSession;
     }
 
-    public HttpServlet getHttpServlet() {
-        return webContext.getHttpServlet();
-    }
-
     @Override
     public Object getAttribute(String name) {
         return getAttributes().get(name);
@@ -119,24 +109,24 @@ public class ServletRequest1 implements HttpServletRequest {
 
     @Override
     public Enumeration<String> getAttributeNames() {
-        return new Vector<String>(getAttributes().keySet()).elements();
+        return new Vector<>(getAttributes().keySet()).elements();
     }
 
     private Map<String, Object> getAttributes() {
-        if (atttributes == null) {
-            atttributes = new HashMap<>();
+        if (attributes == null) {
+            attributes = new HashMap<>();
         }
-        return atttributes;
+        return attributes;
     }
 
     @Override
     public String getCharacterEncoding() {
-        return this.characterEnconding;
+        return this.characterEncoding;
     }
 
     @Override
     public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
-        this.characterEnconding = env;
+        this.characterEncoding = env;
     }
 
     @Override
@@ -171,7 +161,7 @@ public class ServletRequest1 implements HttpServletRequest {
 
     @Override
     public Enumeration<String> getParameterNames() {
-        return new Vector<String>(parameters.keySet()).elements();
+        return new Vector<>(parameters.keySet()).elements();
     }
 
     @Override
@@ -240,7 +230,7 @@ public class ServletRequest1 implements HttpServletRequest {
 
     @Override
     public Enumeration<Locale> getLocales() {
-        return new Vector<Locale>(Arrays.asList(getLocale())).elements();
+        return new Vector<>(Arrays.asList(getLocale())).elements();
     }
 
     @Override
@@ -250,7 +240,7 @@ public class ServletRequest1 implements HttpServletRequest {
 
     @Override
     public RequestDispatcher getRequestDispatcher(String path) {
-        return new RequestDispatcher1(path, webContext);
+        return null;
     }
 
     @Override
@@ -364,7 +354,7 @@ public class ServletRequest1 implements HttpServletRequest {
                 list.add(obj.toString());
             }
         }
-        return new Vector<String>(list).elements();
+        return new Vector<>(list).elements();
     }
 
     private Map<String, List<Object>> getHeader() {
@@ -385,7 +375,7 @@ public class ServletRequest1 implements HttpServletRequest {
 
     @Override
     public Enumeration<String> getHeaderNames() {
-        return new Vector<String>(getHeader().keySet()).elements();
+        return new Vector<>(getHeader().keySet()).elements();
     }
 
     @Override

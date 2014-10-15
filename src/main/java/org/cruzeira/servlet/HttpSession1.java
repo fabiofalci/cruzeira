@@ -3,15 +3,14 @@
  */
 package org.cruzeira.servlet;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 
 /**
  * A very simple implementation of {@link javax.servlet.http.HttpSession}. Just
@@ -80,7 +79,7 @@ public class HttpSession1 implements HttpSession {
 
     @Override
     public Enumeration<String> getAttributeNames() {
-        return new Vector<String>(getAttributes().keySet()).elements();
+        return new Vector<>(getAttributes().keySet()).elements();
     }
 
     public Collection<String> getAttributeNamesAsCollection() {

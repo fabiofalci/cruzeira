@@ -3,15 +3,9 @@
  */
 package org.cruzeira.servlet;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
+import org.cruzeira.context.WebContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration;
@@ -24,10 +18,15 @@ import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.SessionCookieConfig;
 import javax.servlet.SessionTrackingMode;
 import javax.servlet.descriptor.JspConfigDescriptor;
-
-import org.cruzeira.context.WebContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 
 /**
@@ -99,7 +98,7 @@ public class ServletContext1 implements ServletContext {
 
     @Override
     public RequestDispatcher getRequestDispatcher(String path) {
-        return new RequestDispatcher1(path, webContext);
+        return null;
     }
 
     @Override
@@ -154,7 +153,7 @@ public class ServletContext1 implements ServletContext {
 
     @Override
     public Enumeration<String> getInitParameterNames() {
-        return new Vector<String>(getInitParameters().keySet()).elements();
+        return new Vector<>(getInitParameters().keySet()).elements();
     }
 
     @Override
@@ -180,7 +179,7 @@ public class ServletContext1 implements ServletContext {
 
     @Override
     public Enumeration<String> getAttributeNames() {
-        return new Vector<String>(getAttributes().keySet()).elements();
+        return new Vector<>(getAttributes().keySet()).elements();
     }
 
     private Map<String, Object> getAttributes() {
@@ -236,7 +235,7 @@ public class ServletContext1 implements ServletContext {
 
     @Override
     public Map<String, ? extends ServletRegistration> getServletRegistrations() {
-        return new HashMap<>(getServletRegistrations());
+        return new HashMap<>(getServletRegistrationsInternal());
     }
 
     private Map<String, ServletRegistration> getServletRegistrationsInternal() {
