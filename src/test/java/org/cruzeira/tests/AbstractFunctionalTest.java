@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.cruzeira.server.Bootstrap;
 
 import static org.junit.Assert.fail;
@@ -28,15 +29,17 @@ import static org.junit.Assert.fail;
 public class AbstractFunctionalTest {
 
     static HttpClient client;
+    static Bootstrap bootstrap;
     final String url = "http://localhost:8080";
 
     public static void startServer() {
-        Bootstrap.main(new String[]{""});
-        client = new DefaultHttpClient();
+        bootstrap = new Bootstrap();
+        bootstrap.start(8080, 1);
+        client = HttpClientBuilder.create().build();
     }
 
     public static void shutdownServer() {
-        Bootstrap.shutdown();
+        bootstrap.shutdown();
     }
 
     /**

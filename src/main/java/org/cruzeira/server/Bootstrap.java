@@ -21,22 +21,45 @@ import org.slf4j.LoggerFactory;
  */
 public class Bootstrap {
 
-    static PipelineFactory pipeline;
+    final static Logger logger = LoggerFactory.getLogger(Bootstrap.class);
 
-    static EventLoopGroup bossGroup = new NioEventLoopGroup();
-    static EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private PipelineFactory pipeline;
 
-    public static void shutdown() {
+    private EventLoopGroup bossGroup = new NioEventLoopGroup();
+    private EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+    private static Bootstrap bootstrap;
+
+    public static void shutdownNow() {
+        bootstrap.shutdown();
+    }
+
+    public void shutdown() {
         pipeline.shutdown();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
+    }
+
+    public Channel start(int port, int availableProcessors) {
+        int asyncPool = availableProcessors * 2 * 2;
+        pipeline = new PipelineFactory(asyncPool);
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(pipeline);
+
+        try {
+            Channel channel = serverBootstrap.bind(port).sync().channel();
+            logger.info("Running cruzeira {}...", port);
+            return channel;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption("p", true, "Http port");
         CommandLineParser parser = new BasicParser();
-        Logger logger = LoggerFactory.getLogger(Bootstrap.class);
         int port = 8080;
         try {
             CommandLine cmd = parser.parse(options, args);
@@ -52,21 +75,17 @@ public class Bootstrap {
             logger.info("Error on cli");
         }
 
-        int numberOfProcessors = Runtime.getRuntime().availableProcessors();
-        logger.info("Processors: {}", numberOfProcessors);
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        logger.info("Processors: {}", availableProcessors);
 
-        int asyncPool = numberOfProcessors * 2 * 2;
-        ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new PipelineFactory(asyncPool));
-
+        bootstrap = new Bootstrap();
         try {
-            Channel ch = bootstrap.bind(port).sync().channel();
-            logger.info("Running cruzeira {}...", port);
-            ch.closeFuture().sync();
+            Channel channel = bootstrap.start(port, availableProcessors);
+            channel.closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            shutdown();
+            shutdownNow();
         }
     }
 

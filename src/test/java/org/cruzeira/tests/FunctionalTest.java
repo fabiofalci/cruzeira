@@ -4,28 +4,25 @@
 package org.cruzeira.tests;
 
 import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.AfterClass;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-@Ignore
 public class FunctionalTest extends AbstractFunctionalTest {
 
-    static {
+    @BeforeClass
+    public static void beforeClass() {
         startServer();
     }
 
     @AfterClass
-    public static void shutdown() {
+    public static void afterClass() {
         shutdownServer();
     }
 
@@ -33,6 +30,12 @@ public class FunctionalTest extends AbstractFunctionalTest {
     public void simple() {
         String response = getOrFail("/simple");
         assertEquals("simple", response);
+    }
+
+    @Test
+    public void printWriter() {
+        String str = getOrFail("/printWriter");
+        assertEquals("Using print writer response", str);
     }
 
     @Test
@@ -45,7 +48,7 @@ public class FunctionalTest extends AbstractFunctionalTest {
 
         // because if you keep the connection it will include a cookie exactly
         // how it received from server
-        client = new DefaultHttpClient();
+        client = HttpClientBuilder.create().build();
 
         String requestCookie2 = "os=skynet";
         response = getResponseOrFail("/simple", HttpHeaders.Names.COOKIE, requestCookie + "; "
@@ -61,59 +64,4 @@ public class FunctionalTest extends AbstractFunctionalTest {
                 || requestCookie2.equals(headers[1].getValue()));
     }
 
-    @Test
-    public void runtimeException() throws Exception {
-        try {
-            get("/runtimeException");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
-    }
-
-    @Test
-    public void exception() throws Exception {
-        try {
-            get("/exception");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
-    }
-
-    @Test
-    public void error() throws Exception {
-        try {
-            get("/error");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.NOT_IMPLEMENTED.code(), e.getStatusCode());
-        }
-    }
-
-    @Test
-    public void printWriter() {
-        String str = getOrFail("/printWriter");
-        assertEquals("Using print writer response", str);
-    }
-
-    @Test
-    public void asyncRuntimeException() throws Exception {
-        try {
-            get("/asyncRuntimeException");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
-    }
-
-    @Test
-    public void asyncException() throws Exception {
-        try {
-            get("/asyncException");
-            fail();
-        } catch (HttpResponseException e) {
-            assertEquals(HttpResponseStatus.INTERNAL_SERVER_ERROR.code(), e.getStatusCode());
-        }
-    }
 }
