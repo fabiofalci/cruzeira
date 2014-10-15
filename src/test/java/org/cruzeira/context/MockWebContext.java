@@ -3,7 +3,6 @@
  */
 package org.cruzeira.context;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
@@ -17,11 +16,6 @@ public class MockWebContext implements WebContext {
 
     @Override
     public void shutdown() {
-    }
-
-    @Override
-    public ServletConfig getServletConfig() {
-        return null;
     }
 
     @Override

@@ -38,7 +38,6 @@ public class Bootstrap {
         CommandLineParser parser = new BasicParser();
         Logger logger = LoggerFactory.getLogger(Bootstrap.class);
         int port = 8080;
-        boolean devMode = false;
         try {
             CommandLine cmd = parser.parse(options, args);
             if (cmd.hasOption("p")) {
@@ -48,27 +47,15 @@ public class Bootstrap {
                     e.printStackTrace();
                 }
             }
-            devMode = cmd.hasOption("dev");
-            if (devMode) {
-                logger.info("Running in development mode");
-            } else {
-                logger.info("Running in normal mode");
-            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.info("Error on cli");
         }
 
-        int cpus = Runtime.getRuntime().availableProcessors();
-        logger.info("CPUs: {}", cpus);
+        int numberOfProcessors = Runtime.getRuntime().availableProcessors();
+        logger.info("Processors: {}", numberOfProcessors);
 
-        int asyncPool;
-        if (devMode) {
-            asyncPool = 1;
-        } else {
-            asyncPool = cpus * 2 * 2;
-        }
-
+        int asyncPool = numberOfProcessors * 2 * 2;
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new PipelineFactory(asyncPool));
 

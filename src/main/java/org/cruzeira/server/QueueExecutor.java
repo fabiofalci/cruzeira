@@ -32,7 +32,7 @@ public class QueueExecutor implements AsyncTaskExecutor {
     @Override
     public Future<?> submit(Runnable task) {
         logger.info("submit runnable {}", task);
-        FutureTask<Object> future = new FutureTask<Object>(task, null);
+        FutureTask<Object> future = new FutureTask<>(task, null);
         Object response = responses.get();
         responses.remove();
         futures.set(response, future);

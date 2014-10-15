@@ -3,11 +3,6 @@
  */
 package org.cruzeira.context;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-
 import org.cruzeira.servlet.ServletConfig1;
 import org.cruzeira.servlet.ServletContext1;
 import org.slf4j.Logger;
@@ -18,10 +13,14 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+
 
 /**
- * Spring implementation of {@link WebContext}. It is based on
- * {@link XmlWebApplicationContext}.
+ * Spring implementation of WebContext. It is based on XmlWebApplicationContext
  */
 public class SpringContext implements WebContext {
 
@@ -60,14 +59,6 @@ public class SpringContext implements WebContext {
 
     public HttpServlet getHttpServlet() {
         return dispatcherServlet;
-    }
-
-    public DispatcherServlet getDispatcherServlet() {
-        return dispatcherServlet;
-    }
-
-    public ServletConfig getServletConfig() {
-        return servletConfig;
     }
 
     public ServletContext getServletContext() {

@@ -9,9 +9,8 @@ import org.cruzeira.context.WebContext;
 import javax.servlet.http.HttpServlet;
 
 /**
- * This manager controls when cruzeira needs to recompile and reload the project
- * classes. Additionally it provides access to spring context and its dispatcher
- * servlet. Maybe it should be divided in more classes.
+ * This manager provides access to spring context and its dispatcher
+ * servlet
  */
 public class ServerManager {
 
@@ -19,16 +18,8 @@ public class ServerManager {
     private WebContext webContext;
 
     public ServerManager() {
-        this(null);
-    }
-
-    public ServerManager(Class<? extends WebContext> webContextClass) {
-        if (webContextClass == null) {
-            webContextClass = SpringContext.class;
-        }
         try {
-            Class<?> webContextClassNew = Class.forName(webContextClass.getName());
-            webContext = (WebContext) webContextClassNew.newInstance();
+            webContext = new SpringContext();
             httpServlet = webContext.getHttpServlet();
         } catch (Exception e) {
             e.printStackTrace();
