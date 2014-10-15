@@ -268,7 +268,7 @@ public class ServletResponse1 implements HttpServletResponse {
     @Override
     public String getHeader(String name) {
         Collection<String> headers = getHeaders(name);
-        if (headers != null) {
+        if (headers != null && headers.iterator().hasNext()) {
             return headers.iterator().next();
         }
         return null;
