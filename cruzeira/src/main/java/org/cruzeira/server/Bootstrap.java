@@ -72,8 +72,6 @@ public class Bootstrap {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new PipelineFactory(asyncPool));
 
-        new OpenWebJar();
-
         try {
             Channel ch = bootstrap.bind(port).sync().channel();
             logger.info("Running cruzeira {}...", port);
