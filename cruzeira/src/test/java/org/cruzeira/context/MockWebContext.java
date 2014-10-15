@@ -10,23 +10,23 @@ import javax.servlet.http.HttpServlet;
 
 public class MockWebContext implements WebContext {
 
-	@Override
-	public HttpServlet getHttpServlet() {
-		return null;
-	}
+    @Override
+    public HttpServlet getHttpServlet() {
+        return null;
+    }
 
-	@Override
-	public void shutdown() {
-	}
+    @Override
+    public void shutdown() {
+    }
 
-	@Override
-	public ServletConfig getServletConfig() {
-		return null;
-	}
+    @Override
+    public ServletConfig getServletConfig() {
+        return null;
+    }
 
-	@Override
-	public ServletContext getServletContext() {
-		return null;
-	}
+    @Override
+    public ServletContext getServletContext() {
+        return null;
+    }
 
 }

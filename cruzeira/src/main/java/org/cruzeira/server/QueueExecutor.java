@@ -13,37 +13,37 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncTaskExecutor;
 
 public class QueueExecutor implements AsyncTaskExecutor {
-	
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	public static final ThreadLocal<Object> responses = new ThreadLocal<>();
-	public static final ObjectLocal<Object> futures = new ObjectLocal<>();
 
-	@Override
-	public void execute(Runnable task) {
-		logger.info("execute " + task);
-	}
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    public static final ThreadLocal<Object> responses = new ThreadLocal<>();
+    public static final ObjectLocal<Object> futures = new ObjectLocal<>();
 
-	@Override
-	public void execute(Runnable task, long startTimeout) {
-		logger.info("execute " + task + ", " + startTimeout);
-		
-	}
+    @Override
+    public void execute(Runnable task) {
+        logger.info("execute " + task);
+    }
 
-	@Override
-	public Future<?> submit(Runnable task) {
-		logger.info("submit runnable {}", task); 
-		FutureTask<Object> future = new FutureTask<Object>(task, null);
-		Object response = responses.get();
-		responses.remove();
-		futures.set(response, future);
-		return future;
-	}
+    @Override
+    public void execute(Runnable task, long startTimeout) {
+        logger.info("execute " + task + ", " + startTimeout);
 
-	@Override
-	public <T> Future<T> submit(Callable<T> task) {
-		logger.info("submit callable " + task);
-		return null;
-	}
+    }
 
-	
+    @Override
+    public Future<?> submit(Runnable task) {
+        logger.info("submit runnable {}", task);
+        FutureTask<Object> future = new FutureTask<Object>(task, null);
+        Object response = responses.get();
+        responses.remove();
+        futures.set(response, future);
+        return future;
+    }
+
+    @Override
+    public <T> Future<T> submit(Callable<T> task) {
+        logger.info("submit callable " + task);
+        return null;
+    }
+
+
 }

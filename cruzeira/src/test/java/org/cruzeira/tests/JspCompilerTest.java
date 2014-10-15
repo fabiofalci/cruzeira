@@ -17,25 +17,25 @@ import org.junit.Test;
  */
 public class JspCompilerTest {
 
-	@AfterClass
-	public static void clean() {
-		try {
-			Files.deleteIfExists(Paths.get("./target/jspcompiler/views/test_jsp.java"));
-			Files.deleteIfExists(Paths.get("./target/jspcompiler/views"));
-			Files.deleteIfExists(Paths.get("./target/jspcompiler"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @AfterClass
+    public static void clean() {
+        try {
+            Files.deleteIfExists(Paths.get("./target/jspcompiler/views/test_jsp.java"));
+            Files.deleteIfExists(Paths.get("./target/jspcompiler/views"));
+            Files.deleteIfExists(Paths.get("./target/jspcompiler"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Test
-	public void compileJsp() {
-		try {
-			new JspCompiler("./src/test/java/views/compiler", "./target/jspcompiler");
-		} catch (IOException e) {
-			Assert.fail(e.getMessage());
-		}
+    @Test
+    public void compileJsp() {
+        try {
+            new JspCompiler("./src/test/java/views/compiler", "./target/jspcompiler");
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
 
-		Assert.assertTrue(Paths.get("./target/jspcompiler/views/test_jsp.java").toFile().exists());
-	}
+        Assert.assertTrue(Paths.get("./target/jspcompiler/views/test_jsp.java").toFile().exists());
+    }
 }

@@ -11,24 +11,23 @@ import javax.servlet.ServletOutputStream;
 /**
  * A basic implementation of {@link ServletOutputStream} that uses a
  * {@link StringWriter}
- * 
+ *
  * @author frodrigues
- * 
  */
 public class ServletOutputStream1 extends ServletOutputStream {
 
-	private StringWriter stringWriter;
+    private StringWriter stringWriter;
 
-	public ServletOutputStream1() {
-		this.stringWriter = new StringWriter();
-	}
+    public ServletOutputStream1() {
+        this.stringWriter = new StringWriter();
+    }
 
-	@Override
-	public void write(int b) throws IOException {
-		stringWriter.write(b);
-	}
+    @Override
+    public void write(int b) throws IOException {
+        stringWriter.write(b);
+    }
 
-	public StringWriter getStringWriter() {
-		return stringWriter;
-	}
+    public StringWriter getStringWriter() {
+        return stringWriter;
+    }
 }

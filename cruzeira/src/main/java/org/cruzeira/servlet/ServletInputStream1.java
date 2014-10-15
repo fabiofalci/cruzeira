@@ -12,25 +12,24 @@ import javax.servlet.ServletInputStream;
 /**
  * Basic implementantion of {@link ServletInputStream} that uses a
  * {@link ByteBuffer}
- * 
  */
 public class ServletInputStream1 extends ServletInputStream {
 
-	private ByteBuffer buffer;
+    private ByteBuffer buffer;
 
-	public ServletInputStream1(byte[] content) {
-		buffer = ByteBuffer.allocate(content.length);
-		buffer.put(content);
-		buffer.rewind();
-	}
+    public ServletInputStream1(byte[] content) {
+        buffer = ByteBuffer.allocate(content.length);
+        buffer.put(content);
+        buffer.rewind();
+    }
 
-	@Override
-	public int read() throws IOException {
-		try {
-			return buffer.get();
-		} catch (BufferUnderflowException be) {
-			return -1;
-		}
-	}
-	
+    @Override
+    public int read() throws IOException {
+        try {
+            return buffer.get();
+        } catch (BufferUnderflowException be) {
+            return -1;
+        }
+    }
+
 }

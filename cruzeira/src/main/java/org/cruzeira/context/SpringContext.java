@@ -22,57 +22,56 @@ import org.springframework.web.servlet.DispatcherServlet;
 /**
  * Spring implementation of {@link WebContext}. It is based on
  * {@link XmlWebApplicationContext}.
- * 
  */
 public class SpringContext implements WebContext {
 
-	final Logger logger = LoggerFactory.getLogger(SpringContext.class);
+    final Logger logger = LoggerFactory.getLogger(SpringContext.class);
 
-	private WebApplicationContext webAppContext;
-	private DispatcherServlet dispatcherServlet;
-	private ServletConfig servletConfig;
-	private ServletContext servletContext;
+    private WebApplicationContext webAppContext;
+    private DispatcherServlet dispatcherServlet;
+    private ServletConfig servletConfig;
+    private ServletContext servletContext;
 
-	public SpringContext() throws ServletException {
-		this("classpath:app-context.xml");
-	}
+    public SpringContext() throws ServletException {
+        this("classpath:app-context.xml");
+    }
 
-	public SpringContext(String configLocation) throws ServletException {
-		logger.debug("Initializing spring context");
-		XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-		webAppContext = appContext;
-		ContextLoader contextLoader = new ContextLoader(webAppContext);
-		servletContext = new ServletContext1(this);
-		servletContext.setInitParameter(ContextLoader.CONFIG_LOCATION_PARAM, configLocation);
-		contextLoader.initWebApplicationContext(servletContext);
+    public SpringContext(String configLocation) throws ServletException {
+        logger.debug("Initializing spring context");
+        XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+        webAppContext = appContext;
+        ContextLoader contextLoader = new ContextLoader(webAppContext);
+        servletContext = new ServletContext1(this);
+        servletContext.setInitParameter(ContextLoader.CONFIG_LOCATION_PARAM, configLocation);
+        contextLoader.initWebApplicationContext(servletContext);
 
-		dispatcherServlet = new DispatcherServlet(webAppContext);
+        dispatcherServlet = new DispatcherServlet(webAppContext);
 
-		servletConfig = new ServletConfig1(servletContext);
-		dispatcherServlet.init(servletConfig);
-	}
+        servletConfig = new ServletConfig1(servletContext);
+        dispatcherServlet.init(servletConfig);
+    }
 
-	public void shutdown() {
-		logger.debug("Spring context shutdown in progress");
-		AbstractApplicationContext appContext = (AbstractApplicationContext) webAppContext;
-		appContext.destroy();
-		dispatcherServlet.destroy();
-	}
+    public void shutdown() {
+        logger.debug("Spring context shutdown in progress");
+        AbstractApplicationContext appContext = (AbstractApplicationContext) webAppContext;
+        appContext.destroy();
+        dispatcherServlet.destroy();
+    }
 
-	public HttpServlet getHttpServlet() {
-		return dispatcherServlet;
-	}
+    public HttpServlet getHttpServlet() {
+        return dispatcherServlet;
+    }
 
-	public DispatcherServlet getDispatcherServlet() {
-		return dispatcherServlet;
-	}
+    public DispatcherServlet getDispatcherServlet() {
+        return dispatcherServlet;
+    }
 
-	public ServletConfig getServletConfig() {
-		return servletConfig;
-	}
+    public ServletConfig getServletConfig() {
+        return servletConfig;
+    }
 
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
 
 }

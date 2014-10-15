@@ -1,26 +1,26 @@
 <configuration>
-    
-  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>./logs/log.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>./logs/log.%d{yyyy-MM-dd}.log</fileNamePattern>
 
-      <maxHistory>7</maxHistory>
-    </rollingPolicy>    
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./logs/log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/log.%d{yyyy-MM-dd}.log</fileNamePattern>
 
-    <encoder>
-      <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{0} - %msg%n</pattern>
-    </encoder>
-  </appender>    
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
 
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{0} - %msg%n</pattern>
-    </encoder>
-  </appender>
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-  <root level="info">
-    <appender-ref ref="FILE" />
-    <appender-ref ref="STDOUT" />
-  </root>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>

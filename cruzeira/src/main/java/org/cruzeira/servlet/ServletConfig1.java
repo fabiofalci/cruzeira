@@ -10,34 +10,33 @@ import javax.servlet.ServletContext;
 
 /**
  * Basic implementation of {@link ServletConfig}
- * 
  */
 public class ServletConfig1 implements ServletConfig {
 
-	private ServletContext servletContext;
+    private ServletContext servletContext;
 
-	public ServletConfig1(ServletContext servletContext) {
-		this.servletContext = servletContext;
-	}
+    public ServletConfig1(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
-	@Override
-	public String getServletName() {
-		return "cruzeira";
-	}
+    @Override
+    public String getServletName() {
+        return "cruzeira";
+    }
 
-	@Override
-	public String getInitParameter(String name) {
-		return servletContext.getInitParameter(name);
-	}
+    @Override
+    public String getInitParameter(String name) {
+        return servletContext.getInitParameter(name);
+    }
 
-	@Override
-	public Enumeration<String> getInitParameterNames() {
-		return servletContext.getInitParameterNames();
-	}
+    @Override
+    public Enumeration<String> getInitParameterNames() {
+        return servletContext.getInitParameterNames();
+    }
 
-	@Override
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
+    @Override
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
 
 }

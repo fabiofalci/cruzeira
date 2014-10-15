@@ -13,12 +13,12 @@ import org.junit.Test;
 
 public class ServletOutputStream1Test {
 
-	@Test
-	public void write() throws IOException {
-		try (ServletOutputStream1 output = new ServletOutputStream1()) {
-			output.write("1".getBytes()[0]);
-			assertEquals("1", output.getStringWriter().getBuffer().toString());
-		}
-	}
+    @Test
+    public void write() throws IOException {
+        try (ServletOutputStream1 output = new ServletOutputStream1()) {
+            output.write("1".getBytes()[0]);
+            assertEquals("1", output.getStringWriter().getBuffer().toString());
+        }
+    }
 
 }

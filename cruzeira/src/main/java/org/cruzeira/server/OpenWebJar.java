@@ -6,8 +6,8 @@ package org.cruzeira.server;
 
 public class OpenWebJar {
 
-	public OpenWebJar() {
-		// FIXME auto discover webjar and open it
+    public OpenWebJar() {
+        // FIXME auto discover webjar and open it
 //		String file = "/META-INF/resources/webjars/bootstrap/2.3.0/css/bootstrap.min.css";
 //		URL url = getClass().getResource(file);
 //		String path = url.getFile();
@@ -20,9 +20,9 @@ public class OpenWebJar {
 //
 //		List<String> webJars = Arrays.asList("");
 
-		// new
-		// File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-	}
+        // new
+        // File(MyClass.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+    }
 
 //	private void extractJar(File jarFile) throws Exception {
 //		String destDir = "target/webjars/";
