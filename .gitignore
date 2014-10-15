@@ -8,6 +8,4 @@ target/
 *.ipr
 *.iws
 *.jar
-*_jsp.java
-cruzeira-samples/cruzeira-sample/db/
 .idea/
