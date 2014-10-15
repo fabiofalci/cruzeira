@@ -3,16 +3,15 @@
  */
 package org.cruzeira.servlet;
 
-import static org.junit.Assert.*;
-
-import java.util.Enumeration;
+import org.junit.Test;
+import org.springframework.mock.web.MockServletContext;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import java.util.Enumeration;
 
-import org.cruzeira.servlet.ServletConfig1;
-import org.junit.Test;
-import org.springframework.mock.web.MockServletContext;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class ServletConfig1Test {

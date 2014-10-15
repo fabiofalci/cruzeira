@@ -26,11 +26,11 @@ import java.util.List;
  */
 public class AsyncContext1 implements AsyncContext {
 
+    final Logger logger = LoggerFactory.getLogger(AsyncContext1.class);
     private ServletRequest servletRequest;
     private ServletResponse servletResponse;
     private long timeout;
     private List<AsyncListener> asyncListeners;
-    final Logger logger = LoggerFactory.getLogger(AsyncContext1.class);
 
     public AsyncContext1(ServletRequest servletRequest, ServletResponse servletResponse) {
         Assert.notNull(servletRequest, "ServletRequest cannot be null in AsyncContext1");
@@ -120,13 +120,13 @@ public class AsyncContext1 implements AsyncContext {
     }
 
     @Override
-    public void setTimeout(long timeout) {
-        this.timeout = timeout;
+    public long getTimeout() {
+        return timeout;
     }
 
     @Override
-    public long getTimeout() {
-        return timeout;
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 
 }

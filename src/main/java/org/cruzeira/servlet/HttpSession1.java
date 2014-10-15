@@ -46,12 +46,12 @@ public class HttpSession1 implements HttpSession {
     }
 
     @Override
-    public void setMaxInactiveInterval(int interval) {
+    public int getMaxInactiveInterval() {
+        return 0;
     }
 
     @Override
-    public int getMaxInactiveInterval() {
-        return 0;
+    public void setMaxInactiveInterval(int interval) {
     }
 
     @SuppressWarnings("deprecation")

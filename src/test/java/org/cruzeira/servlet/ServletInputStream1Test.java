@@ -3,14 +3,12 @@
  */
 package org.cruzeira.servlet;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
+import org.junit.Test;
 
 import javax.servlet.ServletInputStream;
+import java.io.IOException;
 
-import org.cruzeira.servlet.ServletInputStream1;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 
 public class ServletInputStream1Test {

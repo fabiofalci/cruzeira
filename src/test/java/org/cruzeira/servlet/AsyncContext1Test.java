@@ -3,11 +3,9 @@
  */
 package org.cruzeira.servlet;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-import static javax.servlet.AsyncContext.*;
+import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
@@ -15,11 +13,14 @@ import javax.servlet.AsyncListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import java.io.IOException;
 
-import org.cruzeira.servlet.AsyncContext1;
-import org.junit.Test;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
+import static javax.servlet.AsyncContext.ASYNC_CONTEXT_PATH;
+import static javax.servlet.AsyncContext.ASYNC_QUERY_STRING;
+import static javax.servlet.AsyncContext.ASYNC_REQUEST_URI;
+import static javax.servlet.AsyncContext.ASYNC_SERVLET_PATH;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 public class AsyncContext1Test {

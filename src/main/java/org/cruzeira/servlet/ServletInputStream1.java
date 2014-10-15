@@ -3,11 +3,10 @@
  */
 package org.cruzeira.servlet;
 
+import javax.servlet.ServletInputStream;
 import java.io.IOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-
-import javax.servlet.ServletInputStream;
 
 /**
  * Basic implementantion of {@link ServletInputStream} that uses a

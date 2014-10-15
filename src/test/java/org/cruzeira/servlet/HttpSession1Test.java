@@ -3,15 +3,16 @@
  */
 package org.cruzeira.servlet;
 
-import static org.junit.Assert.*;
-
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpSession;
-
-import org.cruzeira.servlet.HttpSession1;
 import org.junit.Test;
 import org.springframework.mock.web.MockServletContext;
+
+import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class HttpSession1Test {

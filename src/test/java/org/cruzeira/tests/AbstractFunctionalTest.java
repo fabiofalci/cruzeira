@@ -3,8 +3,6 @@
  */
 package org.cruzeira.tests;
 
-import static org.junit.Assert.fail;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -20,6 +18,8 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.cruzeira.server.Bootstrap;
+
+import static org.junit.Assert.fail;
 
 /**
  * Base test class for tests that starts a basic cruzeira application and then

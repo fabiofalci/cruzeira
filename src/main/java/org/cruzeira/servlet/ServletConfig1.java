@@ -3,10 +3,9 @@
  */
 package org.cruzeira.servlet;
 
-import java.util.Enumeration;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import java.util.Enumeration;
 
 /**
  * Basic implementation of {@link ServletConfig}

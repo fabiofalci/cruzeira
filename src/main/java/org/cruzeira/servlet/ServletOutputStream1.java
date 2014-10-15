@@ -3,10 +3,9 @@
  */
 package org.cruzeira.servlet;
 
+import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-
-import javax.servlet.ServletOutputStream;
 
 /**
  * A basic implementation of {@link ServletOutputStream} that uses a

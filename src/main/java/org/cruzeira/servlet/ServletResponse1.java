@@ -36,8 +36,18 @@ public class ServletResponse1 implements HttpServletResponse {
     }
 
     @Override
+    public void setCharacterEncoding(String charset) {
+        this.charset = charset;
+    }
+
+    @Override
     public String getContentType() {
         return contentType;
+    }
+
+    @Override
+    public void setContentType(String type) {
+        this.contentType = type;
     }
 
     @Override
@@ -62,7 +72,6 @@ public class ServletResponse1 implements HttpServletResponse {
         }
     }
 
-
     public StringWriter getStringWriter() {
         return stringWriter;
     }
@@ -77,28 +86,18 @@ public class ServletResponse1 implements HttpServletResponse {
     }
 
     @Override
-    public void setCharacterEncoding(String charset) {
-        this.charset = charset;
-    }
-
-    @Override
     public void setContentLength(int len) {
         setIntHeader("Content-Length", len);
     }
 
     @Override
-    public void setContentType(String type) {
-        this.contentType = type;
+    public int getBufferSize() {
+        return bufferSize;
     }
 
     @Override
     public void setBufferSize(int size) {
         this.bufferSize = size;
-    }
-
-    @Override
-    public int getBufferSize() {
-        return bufferSize;
     }
 
     @Override
@@ -125,15 +124,15 @@ public class ServletResponse1 implements HttpServletResponse {
     }
 
     @Override
-    public void setLocale(Locale loc) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public Locale getLocale() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void setLocale(Locale loc) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -245,11 +244,6 @@ public class ServletResponse1 implements HttpServletResponse {
     }
 
     @Override
-    public void setStatus(int sc) {
-        setStatus(sc, null);
-    }
-
-    @Override
     public void setStatus(int sc, String sm) {
         this.status = sc;
         // TODO sm
@@ -258,6 +252,11 @@ public class ServletResponse1 implements HttpServletResponse {
     @Override
     public int getStatus() {
         return status;
+    }
+
+    @Override
+    public void setStatus(int sc) {
+        setStatus(sc, null);
     }
 
     @Override

@@ -3,17 +3,16 @@
  */
 package org.cruzeira.servlet;
 
+import org.cruzeira.context.MockWebContext;
+import org.junit.Test;
+
+import javax.servlet.ServletContext;
+import java.util.Enumeration;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Enumeration;
-
-import javax.servlet.ServletContext;
-
-import org.cruzeira.context.MockWebContext;
-import org.junit.Test;
 
 
 public class ServletContext1Test {

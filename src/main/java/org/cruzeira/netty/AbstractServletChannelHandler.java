@@ -6,10 +6,8 @@ package org.cruzeira.netty;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.Cookie;
 import io.netty.handler.codec.http.CookieDecoder;
 import io.netty.handler.codec.http.DefaultCookie;
@@ -20,7 +18,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.ServerCookieEncoder;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
-import io.netty.util.ReferenceCountUtil;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cruzeira.context.WebContext;
@@ -50,10 +47,9 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public abstract class AbstractServletChannelHandler extends ChannelInboundHandlerAdapter {
 
+    public static final AttributeKey<Object> STATE = AttributeKey.valueOf("MyHandler.state");
     protected ServerManager serverManager;
     private Logger logger = LoggerFactory.getLogger(getClass());
-
-    public static final AttributeKey<Object> STATE = AttributeKey.valueOf("MyHandler.state");
 
     public AbstractServletChannelHandler(ServerManager serverManager) {
         this.serverManager = serverManager;
@@ -81,7 +77,6 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         response.content().setBytes(0, Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
 
-        // Close the connection as soon as the error message is sent.
         ctx.channel().write(response).addListener(ChannelFutureListener.CLOSE);
     }
 
@@ -149,12 +144,10 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         // Decide whether to close the connection or not.
 //		boolean keepAlive = isKeepAlive(request);
 
-        // Build the response object.
         FullHttpResponse response = null;
         if (servletResponse != null) {
             try {
                 response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(servletResponse.getStatus()), Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
-//                response.content().setBytes(0, Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
                 for (String header : servletResponse.getHeaderNames()) {
 
                     Collection<String> collection = servletResponse.getHeaders(header);
@@ -184,8 +177,6 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         // response.setHeader(CONNECTION, HttpHeaders.Values.KEEP_ALIVE);
         // }
 
-        // Encode the cookie.
-
         try {
             HttpSession1 httpSession = (HttpSession1) servletRequest.getSession();
             List<Cookie> cookies = new ArrayList<>();
@@ -202,7 +193,6 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
             e1.printStackTrace();
         }
 
-        // Write the response.
         logger.info("Writing response");
         ctx.write(response).addListener(ChannelFutureListener.CLOSE);
     }

@@ -3,13 +3,13 @@
  */
 package org.cruzeira.netty;
 
-import java.util.concurrent.Callable;
-
 import org.cruzeira.server.QueueExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.async.CallableProcessingInterceptor;
+
+import java.util.concurrent.Callable;
 
 public class AsyncInterceptor implements CallableProcessingInterceptor {
 
