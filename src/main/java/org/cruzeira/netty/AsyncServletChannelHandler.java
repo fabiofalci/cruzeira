@@ -18,8 +18,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERR
  * This ChannelHandler handles Servlet async requests. It should not run on a
  * worker thread but in an async thread instead (a thread pool created specially
  * for async requests).
- * <p/>
- * <p/>
+ *
  * There is a weird QueueExecutor with some nasty ThreadLocals to bring here the
  * Callable created in the Spring async controller to run in this thread. Maybe
  * think harder to come up a better solution.
@@ -32,11 +31,16 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
         super(serverManager);
     }
 
-    //    @Override
-    public void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         logger.info("Async message received");
 
-        Object[] servlets = (Object[]) ctx.attr(STATE).get();
+        Object[] servlets = (Object[]) msg;
         StringBuilder buf = new StringBuilder();
 
         try {
@@ -51,11 +55,8 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
             return;
         }
 
-        if (servlets == null) {
-//		} else if (request.isChunked()) {
-//			// readingChunks = true;
-        } else {
-            writeResponse(ctx, request, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
+        if (servlets != null) {
+            writeResponse(ctx, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
         }
     }
 

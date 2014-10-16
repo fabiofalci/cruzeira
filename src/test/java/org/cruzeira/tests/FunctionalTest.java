@@ -33,6 +33,12 @@ public class FunctionalTest extends AbstractFunctionalTest {
     }
 
     @Test
+    public void asyncSimple() {
+        String response = getOrFail("/asyncSimple");
+        assertEquals("asyncSimple", response);
+    }
+
+    @Test
     public void printWriter() {
         String str = getOrFail("/printWriter");
         assertEquals("Using print writer response", str);

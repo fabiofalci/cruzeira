@@ -51,9 +51,9 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
         if (servlets == null) {
         } else if (servlets[2] == Boolean.TRUE) {
             // async - send  upstream
-            ctx.fireChannelRead(request);
+            ctx.fireChannelRead(servlets);
         } else {
-            writeResponse(ctx, request, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
+            writeResponse(ctx, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
         }
     }
 

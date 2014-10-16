@@ -16,7 +16,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.ServerCookieEncoder;
-import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +46,6 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public abstract class AbstractServletChannelHandler extends ChannelInboundHandlerAdapter {
 
-    public static final AttributeKey<Object> STATE = AttributeKey.valueOf("MyHandler.state");
     protected ServerManager serverManager;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -91,8 +89,6 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
             return null;
         }
         if (isCheckAsync() && servletRequest.isAsync()) {
-            // logger.info("is async request");
-            ctx.attr(STATE).set(new Object[]{servletRequest, servletResponse});
             return new Object[]{servletRequest, servletResponse, true};
         }
 
@@ -140,16 +136,15 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         return httpSession;
     }
 
-    protected void writeResponse(ChannelHandlerContext ctx, FullHttpRequest request, StringBuilder buf, ServletRequest1 servletRequest, ServletResponse1 servletResponse) {
+    protected void writeResponse(ChannelHandlerContext ctx, StringBuilder buf, ServletRequest1 servletRequest, ServletResponse1 servletResponse) {
         // Decide whether to close the connection or not.
 //		boolean keepAlive = isKeepAlive(request);
 
-        FullHttpResponse response = null;
+        FullHttpResponse response;
         if (servletResponse != null) {
             try {
                 response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(servletResponse.getStatus()), Unpooled.copiedBuffer(buf.toString(), CharsetUtil.UTF_8));
                 for (String header : servletResponse.getHeaderNames()) {
-
                     Collection<String> collection = servletResponse.getHeaders(header);
                     for (String element : collection) {
                         response.headers().add(header, element);
@@ -161,6 +156,7 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+                throw new RuntimeException(ex);
             }
         } else {
             response = new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND);
@@ -194,7 +190,7 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         }
 
         logger.info("Writing response");
-        ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
     @Override

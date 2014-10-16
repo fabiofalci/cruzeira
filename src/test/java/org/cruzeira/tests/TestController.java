@@ -16,10 +16,18 @@ import java.util.concurrent.Callable;
 public class TestController {
 
     @RequestMapping("/simple")
-    public
-    @ResponseBody
-    String simple() {
+    public @ResponseBody String simple() {
         return "simple";
+    }
+
+    @RequestMapping("/asyncSimple")
+    public @ResponseBody Callable<String> asyncSimple() {
+        return new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "asyncSimple";
+            }
+        };
     }
 
     @RequestMapping("/asyncRuntimeException")

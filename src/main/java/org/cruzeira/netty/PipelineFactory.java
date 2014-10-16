@@ -8,6 +8,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.cruzeira.server.ServerManager;
 
 public class PipelineFactory extends ChannelInitializer<SocketChannel> {
@@ -29,7 +30,7 @@ public class PipelineFactory extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new HttpObjectAggregator(65536));
 //        pipeline.addLast(new ChunkedWriteHandler());
         pipeline.addLast(new ServletChannelHandler(serverManager));
-//        pipeline.addLast(new DefaultEventExecutorGroup(asyncPoolSize), new AsyncServletChannelHandler(serverManager));
+        pipeline.addLast(new DefaultEventExecutorGroup(asyncPoolSize), new AsyncServletChannelHandler(serverManager));
     }
 
     public void shutdown() {
