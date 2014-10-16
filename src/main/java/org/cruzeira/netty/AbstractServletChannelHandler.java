@@ -75,7 +75,7 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
         response.content().setBytes(0, Unpooled.copiedBuffer("Failure: " + status.toString() + "\r\n", CharsetUtil.UTF_8));
 
-        ctx.channel().write(response).addListener(ChannelFutureListener.CLOSE);
+        ctx.channel().writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
     // array = servletRequest, servletResponse, async
