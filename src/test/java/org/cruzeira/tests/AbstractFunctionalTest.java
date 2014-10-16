@@ -30,11 +30,11 @@ public class AbstractFunctionalTest {
 
     static HttpClient client;
     static Bootstrap bootstrap;
-    final String url = "http://localhost:8080";
+    final String url = "http://localhost:9080";
 
     public static void startServer() {
         bootstrap = new Bootstrap();
-        bootstrap.start(8080, 1);
+        bootstrap.start(9080, 1);
         client = HttpClientBuilder.create().build();
     }
 
