@@ -6,8 +6,6 @@ package org.cruzeira.netty;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.cruzeira.server.ServerManager;
-import org.cruzeira.servlet.ServletRequest1;
-import org.cruzeira.servlet.ServletResponse1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,21 +37,22 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
         // is100ContinueExpected(request);
         StringBuilder buf = new StringBuilder();
 
-        Object[] servlets;
+        ServletOutput servletOutput;
         try {
-            servlets = doServlet(ctx, request, buf);
+            servletOutput = doServlet(ctx, request, buf);
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
             sendError(ctx, INTERNAL_SERVER_ERROR);
             return;
         }
 
-        if (servlets == null) {
-        } else if (servlets[2] == Boolean.TRUE) {
-            // async - send  upstream
-            ctx.fireChannelRead(servlets);
-        } else {
-            writeResponse(ctx, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
+        if (servletOutput != null) {
+            if (servletOutput.isAsync()) {
+                // async - send  upstream
+                ctx.fireChannelRead(servletOutput);
+            } else {
+                writeResponse(ctx, buf, servletOutput.getServletRequest(), servletOutput.getServletResponse());
+            }
         }
     }
 

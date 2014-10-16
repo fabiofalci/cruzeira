@@ -53,7 +53,7 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         this.serverManager = serverManager;
     }
 
-    protected Object[] doServlet(ChannelHandlerContext ctx, FullHttpRequest request, StringBuilder buf) throws Exception {
+    protected ServletOutput doServlet(ChannelHandlerContext ctx, FullHttpRequest request, StringBuilder buf) throws Exception {
         ServletContext servletContext = getSpringContext().getServletContext();
         HttpSession1 httpSession = createHttpSession(request, servletContext);
 
@@ -78,8 +78,7 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
         ctx.channel().writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
-    // array = servletRequest, servletResponse, async
-    protected Object[] doServlet(ChannelHandlerContext ctx, StringBuilder buf, ServletRequest1 servletRequest, ServletResponse1 servletResponse)
+    protected ServletOutput doServlet(ChannelHandlerContext ctx, StringBuilder buf, ServletRequest1 servletRequest, ServletResponse1 servletResponse)
             throws Exception {
         getDispatcherServlet().service(servletRequest, servletResponse);
 
@@ -89,14 +88,14 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
             return null;
         }
         if (isCheckAsync() && servletRequest.isAsync()) {
-            return new Object[]{servletRequest, servletResponse, true};
+            return new ServletOutput(servletRequest, servletResponse, true);
         }
 
         if (servletResponse.getStringWriter() != null) {
             buf.append(servletResponse.getStringWriter().getBuffer().toString());
             servletResponse.flushBuffer();
         }
-        return new Object[]{servletRequest, servletResponse, false};
+        return new ServletOutput(servletRequest, servletResponse, false);
     }
 
     private void buildServletRequestHeader(ServletRequest1 servletRequest, FullHttpRequest httpRequest) {
@@ -208,5 +207,30 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
 
     protected HttpServlet getDispatcherServlet() {
         return serverManager.getDispatcherServlet();
+    }
+
+    protected class ServletOutput {
+
+        private ServletRequest1 servletRequest;
+        private ServletResponse1 servletResponse;
+        private boolean async;
+
+        public ServletOutput(ServletRequest1 servletRequest, ServletResponse1 servletResponse, boolean async) {
+            this.servletRequest = servletRequest;
+            this.servletResponse = servletResponse;
+            this.async = async;
+        }
+
+        public ServletRequest1 getServletRequest() {
+            return servletRequest;
+        }
+
+        public ServletResponse1 getServletResponse() {
+            return servletResponse;
+        }
+
+        public boolean isAsync() {
+            return async;
+        }
     }
 }

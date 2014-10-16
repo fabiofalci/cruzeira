@@ -40,23 +40,23 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         logger.info("Async message received");
 
-        Object[] servlets = (Object[]) msg;
+        ServletOutput servletOutput = (ServletOutput) msg;
         StringBuilder buf = new StringBuilder();
 
         try {
-            Runnable runnable = (Runnable) QueueExecutor.futures.get(servlets[1]);
-            logger.info("Request, response, runnable: {}, {}, {}", servlets[0], servlets[1], runnable);
-            QueueExecutor.futures.remove(servlets[1]);
+            Runnable runnable = (Runnable) QueueExecutor.futures.get(servletOutput.getServletResponse());
+            logger.info("Request, response, runnable: {}, {}, {}", servletOutput.getServletRequest(), servletOutput.getServletResponse(), runnable);
+            QueueExecutor.futures.remove(servletOutput.getServletResponse());
             runnable.run();
-            servlets = doServlet(ctx, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
+            servletOutput = doServlet(ctx, buf, servletOutput.getServletRequest(), servletOutput.getServletResponse());
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
             sendError(ctx, INTERNAL_SERVER_ERROR);
             return;
         }
 
-        if (servlets != null) {
-            writeResponse(ctx, buf, (ServletRequest1) servlets[0], (ServletResponse1) servlets[1]);
+        if (servletOutput != null) {
+            writeResponse(ctx, buf, servletOutput.getServletRequest(), servletOutput.getServletResponse());
         }
     }
 
