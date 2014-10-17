@@ -5,7 +5,7 @@ package org.cruzeira.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import org.cruzeira.WebContext;
-import org.cruzeira.spring.QueueExecutor;
+import org.cruzeira.spring.ThreadLocalAsyncExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +41,9 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
         StringBuilder buf = new StringBuilder();
 
         try {
-            Runnable runnable = (Runnable) QueueExecutor.futures.get(servletOutput.getServletResponse());
-            logger.info("Request, response, runnable: {}, {}, {}", servletOutput.getServletRequest(), servletOutput.getServletResponse(), runnable);
-            QueueExecutor.futures.remove(servletOutput.getServletResponse());
-            runnable.run();
+            Runnable asyncRunnable = ThreadLocalAsyncExecutor.getAndRemoveAsyncRunnable(servletOutput.getServletResponse());
+            logger.info("Request, response, runnable: {}, {}, {}", servletOutput.getServletRequest(), servletOutput.getServletResponse(), asyncRunnable);
+            asyncRunnable.run();
             servletOutput = doServlet(ctx, buf, servletOutput.getServletRequest(), servletOutput.getServletResponse());
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);

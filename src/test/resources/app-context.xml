@@ -19,6 +19,6 @@
         </mvc:async-support>
     </mvc:annotation-driven>
 
-    <bean id="asyncTaskExecutor" class="org.cruzeira.spring.QueueExecutor"/>
+    <bean id="asyncTaskExecutor" class="org.cruzeira.spring.ThreadLocalAsyncExecutor"/>
 
 </beans>

@@ -4,6 +4,7 @@
 package org.cruzeira.spring;
 
 import org.cruzeira.netty.ObjectLocal;
+import org.cruzeira.servlet.ServletResponse1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncTaskExecutor;
@@ -12,10 +13,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
-public class QueueExecutor implements AsyncTaskExecutor {
+public class ThreadLocalAsyncExecutor implements AsyncTaskExecutor {
 
-    public static final ThreadLocal<Object> responses = new ThreadLocal<>();
-    public static final ObjectLocal<Object> futures = new ObjectLocal<>();
+    private static final ThreadLocal<Object> responses = new ThreadLocal<>();
+    private static final ObjectLocal<Runnable> futures = new ObjectLocal<>();
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -44,5 +45,13 @@ public class QueueExecutor implements AsyncTaskExecutor {
         return null;
     }
 
+    public static void setResponse(Object response) {
+        responses.set(response);
+    }
 
+    public static Runnable getAndRemoveAsyncRunnable(Object object) {
+        Runnable runnable = futures.get(object);
+        futures.remove(runnable);
+        return runnable;
+    }
 }

@@ -17,7 +17,7 @@ public class AsyncInterceptor implements CallableProcessingInterceptor {
     @Override
     public <T> void beforeConcurrentHandling(NativeWebRequest request, Callable<T> task) throws Exception {
         logger.info("beforeConcurrentHandling " + request.getNativeRequest() + " " + request.getNativeResponse());
-        QueueExecutor.responses.set(request.getNativeResponse());
+        ThreadLocalAsyncExecutor.setResponse(request.getNativeResponse());
     }
 
     @Override
