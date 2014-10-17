@@ -42,11 +42,11 @@ public class Bootstrap {
 
     public Channel start(int port, int availableProcessors) {
         int asyncPool = availableProcessors * 2 * 2;
-        pipeline = new PipelineFactory(asyncPool);
-        ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(pipeline);
-
         try {
+            pipeline = new PipelineFactory(asyncPool);
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
+            serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(pipeline);
+
             Channel channel = serverBootstrap.bind(port).sync().channel();
             logger.info("Running cruzeira {}...", port);
             return channel;

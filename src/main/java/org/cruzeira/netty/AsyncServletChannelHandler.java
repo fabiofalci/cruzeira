@@ -4,8 +4,8 @@
 package org.cruzeira.netty;
 
 import io.netty.channel.ChannelHandlerContext;
+import org.cruzeira.WebContext;
 import org.cruzeira.spring.QueueExecutor;
-import org.cruzeira.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +24,8 @@ public class AsyncServletChannelHandler extends AbstractServletChannelHandler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public AsyncServletChannelHandler(ServerManager serverManager) {
-        super(serverManager);
+    public AsyncServletChannelHandler(WebContext webContext) {
+        super(webContext);
     }
 
     @Override

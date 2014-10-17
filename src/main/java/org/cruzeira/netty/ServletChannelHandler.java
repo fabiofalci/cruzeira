@@ -5,7 +5,7 @@ package org.cruzeira.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
-import org.cruzeira.ServerManager;
+import org.cruzeira.WebContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +22,8 @@ public class ServletChannelHandler extends AbstractServletChannelHandler {
 
     final Logger logger = LoggerFactory.getLogger(ServletChannelHandler.class);
 
-    public ServletChannelHandler(ServerManager serverManager) {
-        super(serverManager);
+    public ServletChannelHandler(WebContext webContext) {
+        super(webContext);
     }
 
     @Override

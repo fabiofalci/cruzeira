@@ -20,7 +20,6 @@ import io.netty.util.CharsetUtil;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cruzeira.WebContext;
-import org.cruzeira.ServerManager;
 import org.cruzeira.servlet.HttpSession1;
 import org.cruzeira.servlet.ServletRequest1;
 import org.cruzeira.servlet.ServletResponse1;
@@ -46,11 +45,11 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  */
 public abstract class AbstractServletChannelHandler extends ChannelInboundHandlerAdapter {
 
-    protected ServerManager serverManager;
+    protected WebContext webContext;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    public AbstractServletChannelHandler(ServerManager serverManager) {
-        this.serverManager = serverManager;
+    public AbstractServletChannelHandler(WebContext webContext) {
+        this.webContext = webContext;
     }
 
     protected ServletOutput doServlet(ChannelHandlerContext ctx, FullHttpRequest request, StringBuilder buf) throws Exception {
@@ -202,11 +201,11 @@ public abstract class AbstractServletChannelHandler extends ChannelInboundHandle
     }
 
     protected WebContext getSpringContext() {
-        return serverManager.getSpringContext();
+        return webContext;
     }
 
     protected HttpServlet getDispatcherServlet() {
-        return serverManager.getDispatcherServlet();
+        return webContext.getHttpServlet();
     }
 
     protected class ServletOutput {

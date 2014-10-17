@@ -9,15 +9,16 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import org.cruzeira.ServerManager;
+import org.cruzeira.WebContext;
+import org.cruzeira.spring.SpringContext;
 
 public class PipelineFactory extends ChannelInitializer<SocketChannel> {
 
-    private ServerManager serverManager;
+    private WebContext webContext;
     private int asyncPoolSize;
 
-    public PipelineFactory(int asyncPoolSize) {
-        this.serverManager = new ServerManager();
+    public PipelineFactory(int asyncPoolSize) throws Exception {
+        this.webContext = new SpringContext();
         this.asyncPoolSize = asyncPoolSize;
     }
 
@@ -28,13 +29,12 @@ public class PipelineFactory extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new HttpServerCodec());
 
         pipeline.addLast(new HttpObjectAggregator(65536));
-//        pipeline.addLast(new ChunkedWriteHandler());
-        pipeline.addLast(new ServletChannelHandler(serverManager));
-        pipeline.addLast(new DefaultEventExecutorGroup(asyncPoolSize), new AsyncServletChannelHandler(serverManager));
+        pipeline.addLast(new ServletChannelHandler(webContext));
+        pipeline.addLast(new DefaultEventExecutorGroup(asyncPoolSize), new AsyncServletChannelHandler(webContext));
     }
 
     public void shutdown() {
-        serverManager.getSpringContext().shutdown();
+        webContext.shutdown();
     }
 
 }
