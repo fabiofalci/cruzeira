@@ -3,7 +3,7 @@
  */
 package org.cruzeira.servlet;
 
-import org.cruzeira.context.WebContext;
+import org.cruzeira.WebContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

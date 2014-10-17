@@ -5,8 +5,6 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans.xsd
-
-
      http://www.springframework.org/schema/context
      http://www.springframework.org/schema/context/spring-context.xsd
      http://www.springframework.org/schema/mvc
@@ -16,11 +14,11 @@
     <mvc:annotation-driven>
         <mvc:async-support default-timeout="10" task-executor="asyncTaskExecutor">
             <mvc:callable-interceptors>
-                <bean class="org.cruzeira.netty.AsyncInterceptor"/>
+                <bean class="org.cruzeira.spring.AsyncInterceptor"/>
             </mvc:callable-interceptors>
         </mvc:async-support>
     </mvc:annotation-driven>
 
-    <bean id="asyncTaskExecutor" class="org.cruzeira.server.QueueExecutor"/>
+    <bean id="asyncTaskExecutor" class="org.cruzeira.spring.QueueExecutor"/>
 
 </beans>

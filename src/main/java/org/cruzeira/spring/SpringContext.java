@@ -1,8 +1,9 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.context;
+package org.cruzeira.spring;
 
+import org.cruzeira.WebContext;
 import org.cruzeira.servlet.ServletConfig1;
 import org.cruzeira.servlet.ServletContext1;
 import org.slf4j.Logger;

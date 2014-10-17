@@ -4,7 +4,7 @@
 package org.cruzeira.servlet;
 
 import io.netty.handler.codec.http.QueryStringDecoder;
-import org.cruzeira.context.WebContext;
+import org.cruzeira.WebContext;
 import org.springframework.util.Assert;
 
 import javax.servlet.AsyncContext;

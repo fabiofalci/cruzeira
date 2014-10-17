@@ -3,6 +3,8 @@
  */
 package org.cruzeira.context;
 
+import org.cruzeira.WebContext;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 

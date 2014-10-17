@@ -1,7 +1,7 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.server;
+package org.cruzeira.spring;
 
 import org.cruzeira.netty.ObjectLocal;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ public class QueueExecutor implements AsyncTaskExecutor {
     @Override
     public void execute(Runnable task, long startTimeout) {
         logger.info("execute " + task + ", " + startTimeout);
-
     }
 
     @Override

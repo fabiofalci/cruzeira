@@ -16,9 +16,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.cruzeira.server.Bootstrap;
+import org.cruzeira.Bootstrap;
 
 import static org.junit.Assert.fail;
 

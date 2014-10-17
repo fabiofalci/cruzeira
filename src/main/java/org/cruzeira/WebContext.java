@@ -1,7 +1,7 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.context;
+package org.cruzeira;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
  * implementation must be initialized and must provide access to the various
  * servlet classes (like config and context).
  *
- * @see SpringContext
+ * @see org.cruzeira.spring.SpringContext
  */
 public interface WebContext {
 

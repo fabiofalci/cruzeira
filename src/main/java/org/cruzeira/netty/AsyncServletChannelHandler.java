@@ -4,11 +4,8 @@
 package org.cruzeira.netty;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.FullHttpRequest;
-import org.cruzeira.server.QueueExecutor;
-import org.cruzeira.server.ServerManager;
-import org.cruzeira.servlet.ServletRequest1;
-import org.cruzeira.servlet.ServletResponse1;
+import org.cruzeira.spring.QueueExecutor;
+import org.cruzeira.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

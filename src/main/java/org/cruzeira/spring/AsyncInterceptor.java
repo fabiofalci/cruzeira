@@ -1,9 +1,8 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.netty;
+package org.cruzeira.spring;
 
-import org.cruzeira.server.QueueExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.NativeWebRequest;

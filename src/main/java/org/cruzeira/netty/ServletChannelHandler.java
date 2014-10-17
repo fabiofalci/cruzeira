@@ -5,7 +5,7 @@ package org.cruzeira.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
-import org.cruzeira.server.ServerManager;
+import org.cruzeira.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

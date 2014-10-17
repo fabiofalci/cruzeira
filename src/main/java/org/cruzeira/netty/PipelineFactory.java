@@ -9,7 +9,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import org.cruzeira.server.ServerManager;
+import org.cruzeira.ServerManager;
 
 public class PipelineFactory extends ChannelInitializer<SocketChannel> {
 

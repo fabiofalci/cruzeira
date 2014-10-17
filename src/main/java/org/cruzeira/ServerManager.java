@@ -1,15 +1,15 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.server;
+package org.cruzeira;
 
-import org.cruzeira.context.SpringContext;
-import org.cruzeira.context.WebContext;
+import org.cruzeira.spring.SpringContext;
+import org.cruzeira.WebContext;
 
 import javax.servlet.http.HttpServlet;
 
 /**
- * This manager provides access to spring context and its dispatcher
+ * This manager provides access to web context and its dispatcher
  * servlet
  */
 public class ServerManager {

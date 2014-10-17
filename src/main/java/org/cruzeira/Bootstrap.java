@@ -1,7 +1,7 @@
 /*
  * This file is part of cruzeira and it's licensed under the project terms.
  */
-package org.cruzeira.server;
+package org.cruzeira;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
